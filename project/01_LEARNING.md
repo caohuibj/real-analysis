@@ -205,7 +205,9 @@ Next question
 - 后续再次修订时继续追加，不覆盖任何旧判断；
 - 不创建 Attempt、Session 或第二条独立题目记录。
 
-修订必须回答“原来的缺口是否真的被修复”，而不是只看最终结论是否正确。
+修订必须回答“原来的缺口是否在当前题目上真的被修复”，而不是只看最终结论是否正确。Revision 属于 **local repair evidence**：它发生在同一轮反馈和提示之后，因此不能单独证明用户已经能在无当前 scaffold 的新情境中稳定使用该能力。
+
+如果这个缺口只是局部、非核心的小错误，Revision 可以结束当前题目的修复；如果它是会阻塞 chapter readiness 的重要核心弱点，则 Revision 即使为 `CORRECT`，也必须随后通过新的独立题、Retest 或其他 genuinely unscaffolded answer 完成 independent verification 后，才能把该弱点视为关闭。
 
 如果用户在之后的新时间点重新独立做同一道教材题，则按 Retest 处理，创建新的题目记录，不再追加 Revision。
 
@@ -263,7 +265,7 @@ Notion 写入失败时：
 3. 至少有一项概念辨析、例子/反例或适用边界证据；
 4. 至少有一项独立短证明、证明骨架或策略选择证据；
 5. 已经有一道有区分度的 Rudin / Abbott 习题或综合问题证据，除非前述证据本身已充分覆盖同等迁移能力；
-6. 本章当前仍重要的 `PARTIAL` / `INCORRECT` 缺口已经经过 remediation，并用新的独立作答、Revision 或 Retest 验证修复；
+6. 本章当前仍重要的 `PARTIAL` / `INCORRECT` 缺口已经经过 remediation；Revision 可以证明原题的局部修复，但若该缺口是阻塞 readiness 的重要核心弱点，还必须通过新的独立题、Retest 或其他不依赖当前提示的作答完成 independent verification，Revision alone 不足；
 7. 没有关键能力仍只基于“听懂了解释”或 `UNVERIFIED` 状态而未独立验证。
 
 这些是默认 readiness 条件，不是固定题数。一个高质量问题可以同时覆盖多个 chapter-specific 出口证据和能力类别。满足时可以建议推进；不满足时 `Next` 继续留在当前章并明确缺失的 reading/content coverage、证据或待修复能力。用户主动跳章始终允许，但不能把主动跳过记成已掌握。
