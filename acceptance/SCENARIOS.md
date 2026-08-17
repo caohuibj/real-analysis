@@ -1,407 +1,235 @@
-# Runtime Acceptance Scenarios
+# Acceptance Scenarios
 
-本文件用于 Project 装配完成后的人工验收，不作为运行时 Project File。
+这些场景用于检查 Project 是否遵守 `00_PROJECT.md`–`04_CURRICULUM.md`。
 
-每个场景都应同时观察对话行为和 `Review Analysis` 的实际写入结果。
+## 1. Resume Assigned Reading
 
-## 1. Start a Chapter
+**Given** `Review Analysis / RA05` 存在 `Reading State: ASSIGNED` 的未完成 Rudin block。  
+**When** 用户说“继续 RA05”。  
+**Then** Project 必须恢复该 block，而不是创建新的 reading assignment。
 
-输入：
+## 2. Complete Reading Before Assessment
 
-```text
-开始 RA01。
-```
+**Given** 当前 block 为 ASSIGNED。  
+**When** 用户说“这段读完了”。  
+**Then** 先把同一 block 更新为 COMPLETED 并记录日期，再进入 assessment。
 
-期望：
+## 3. Reading Completion Is Not Mastery
 
-- 明确把 `RA01` 当作 knowledge chapter，而不是 Rudin Chapter 1 的别名；
-- 先读取 `Review Analysis / RA01` 的顶部状态和最近 Study Record；
-- 若存在 `Reading State: ASSIGNED` 的未完成 reading block，优先恢复它；
-- 否则根据历史选择有限的 Rudin 阅读范围；没有历史时才使用首个自然 reading block；
-- 新 reading block 立即写入 `Reading State: ASSIGNED`；
-- 说明阅读重点和暂缓内容；
-- 不立即把整章讲完；
-- 本身不创建评估题记录（除非随后正式提出评估题）。
+**When** 用户完成 reading block。  
+**Then** 不因“读完”直接把 RA 标为 mastered/ready；仍需 assessment evidence。
 
-## 2. Reading Completion
+## 4. Question Becomes OPEN Immediately
 
-前提：用户已完成 Project 指定的 Rudin 范围，当前 reading block 为 `ASSIGNED`。
+**When** Project 提出一条正式 assessment question。  
+**Then** 同步在 exact RA page 创建 `Qn — OPEN`，再等待答案。
 
-输入：
+## 5. First Answer Completes Same Record
 
-```text
-这一段读完了。
-```
+**Given** Qn 为 OPEN。  
+**When** 用户首次回答。  
+**Then** 更新同一 Qn 为 COMPLETE；不创建第二条 answer record。
 
-期望：
+## 6. COMPLETE Is Immutable
 
-- 先把同一 reading block 更新为 `Reading State: COMPLETED` 并记录完成日期；
-- 明确知道 `COMPLETED` 只表示阅读完成，不是 mastery evidence；
-- 进入 closed-book 测试；
-- 第一次只提出一个主要问题；
-- 出新题前重新读取章节最新 Study Record，确认没有应恢复的 `OPEN` 题并分配下一个未使用 Q number；
-- 正式提出问题时立即在 `Review Analysis / RA01` 建立 `OPEN` 记录，包含 `Question`、`Source` 和“等待回答”；
-- 不先输出整节总结或完整答案。
+**Given** Qn 已 COMPLETE。  
+**When** 用户修改答案。  
+**Then** 原始 My Answer / Assessment / Feedback 保留，只追加 Revision。
 
-## 3. Immediate Question Persistence
+## 7. Revision Is Not Independent Verification
 
-输入：Project 正式提出第一个评估题，但用户暂时没有回答。
+**Given** 一个 blocking weakness 在反馈后 Revision 已 CORRECT。  
+**Then** weakness 仍需新题、Retest 或其他 genuinely unscaffolded answer 才能关闭。
 
-期望：
+## 8. Later Retest Is a New Q
 
-- 题目已经在对应章节页中有 `OPEN` 记录；
-- 记录包含完整 `Question`、`Source`、`Record State: OPEN` 和“等待回答”；
-- Notion 写入失败时明确告知用户尚未可靠保存；
-- 恢复章节时先读取这条 OPEN 记录，而不是重新创建同一题。
+**Given** 用户之后重新独立做旧题。  
+**Then** 创建新的 Q record，并写 `Retest of RAxx/Qn`；不追加到旧 Revision。
 
-## 4. Correct Answer as Positive Evidence
+## 9. No Attempt Is UNVERIFIED
 
-输入：用户准确写出一个定义，并正确处理量词。
+**When** 用户说“不会”、跳过、放弃，或无独立尝试直接要完整解。  
+**Then** 完成当前 OPEN Q，但 Assessment = UNVERIFIED，不写 INCORRECT。
 
-期望：
+## 10. Re-fetch Before New Question
 
-- 判断为 `CORRECT`；
-- 简短说明证据；
-- 更新同一条已存在的 `OPEN` 记录，写入原回答、`Assessment` 和 `Feedback`，并把 `Record State` 改为 `COMPLETE`；
-- 将正向证据写入对应章节页；
-- 根据证据进入更高层次问题，而不是重复同一道基础题。
+**When** Project 准备提出新的正式问题。  
+**Then** 重新 fetch exact RA page；有 OPEN 先恢复，否则扫描现有 Q number 后分配下一个未占用编号。
 
-## 5. Partial Proof
+## 11. Notion Search Is Locator Only
 
-输入：用户证明的核心想法正确，但缺少关键估计。
+**Given** 章节页通过 Notion search 找到。  
+**Then** 必须 fetch exact page 后才能判断 Current Assessment、Next、Reading State、OPEN 或 Q number。
 
-期望：
+## 12. Failed Notion Write Is Not Claimed Saved
 
-- 判断为 `PARTIAL`；
-- 指出第一处关键缺口；
-- 需要时标记 `RIGOR` 或 `STRATEGY`；
-- 给出最小修复方向和下一道验证题；
-- 将原始回答、反馈和判断写入章节页；
-- 在缺口未经独立验证修复前，不把章节默认推进为 ready。
+**When** Notion write 未成功。  
+**Then** Project 不得声称“已保存”。
 
-## 6. Incorrect Quantifier or Concept
+## 13. Solution Guide After Attempt Only
 
-输入：用户交换了 ε 和 N 的量词顺序，或误用了定理条件。
+**When** 用户只要普通 hint 且已有题干。  
+**Then** 不先查 Solution Guide。  
+**When** 用户已有 substantive attempt 或明确要 reference/full solution。  
+**Then** 可以使用 Solution Guide。
 
-期望：
+## 14. Sole User-Facing Textbook
 
-- 判断为 `INCORRECT`；
-- 标记 `LOGIC` 或 `CONCEPT`；
-- 不机械罗列由第一处错误造成的所有后果；
-- 先补救，再重新验证；
-- 原始回答不能被修订覆盖；
-- “听懂解释”本身不能关闭该缺口。
+**When** Project 安排正式 reading。  
+**Then** reading source 必须是 Rudin。Abbott / Analysis123 不产生 reading block。
 
-## 7. Adaptive Difficulty
+## 15. Abbott Can Be Proactive
 
-前提 A：用户连续准确回答定义、条件和短证明。
+**Given** 用户当前没有答错，但 Rudin 表述非常压缩。  
+**When** Abbott 有明显更好的 motivation / proof organization。  
+**Then** Project 可以主动在 chat 中推送 Abbott conceptual layer，而不要求用户另读 Abbott。
 
-期望：
+## 16. Analysis123 Push Is Self-Contained
 
-- 跳过无区分度的重复题；
-- 进入反例、综合证明或 Rudin 习题。
+**When** 使用 Analysis123 的例子、应用或习题。  
+**Then** chat 中提供完成任务所需的题干与背景；不要求用户打开讲义寻找上下文。
 
-前提 B：用户在基础问题上不稳定。
+## 17. Tutor-Side Question Can Produce Evidence
 
-期望：
+**Given** 一道 Analysis123 transfer question 只使用已经掌握的 Rudin tools。  
+**When** 用户独立正确完成。  
+**Then** 它可以作为正式 transfer evidence。
 
-- 暂停升级；
-- 调用必要的 Abbott 解释或 Project Source 片段；
-- 通过新的短题确认是否修复；
-- 若需要使用已做过的教材题，创建新的 Retest record，写 `Retest of RAxx/Qm — [目的]`，不改写原记录；
-- 普通 hint 不先查 solution；solution 只在 substantive attempt 后或用户明确要求 reference/full solution 时使用。
+## 18. Advanced Failure Does Not Falsely Become Core Weakness
 
-## 8. Revision of the Same Problem
+**Given** 一个 FORWARD question 实际依赖尚未学习的 advanced theory。  
+**When** 用户不会。  
+**Then** 不得把失败直接写成 Rudin core weakness。
 
-输入：用户在当前反馈后立即修改同一道证明。
+## 19. Enrichment Can Expose a Real Core Weakness
 
-期望：
+**Given** Analysis123 只是给已学 Rudin theorem 换了新外壳。  
+**When** 用户因漏掉该 theorem 的核心 hypothesis 而失败。  
+**Then** 该 weakness 是真实 evidence，可以阻塞 readiness。
 
-- 使用同一条题目记录；
-- 保留第一次 `My Answer`、原始 `Assessment` 和原始 `Feedback`；
-- 追加 `Revision`、`Revision Assessment` 和 `Revision Feedback` 并重新判断；
-- 不创建 Attempt、Session 或第二个问题页面；
-- 不把这次同轮修订错误标记成 Retest；
-- Revision 只能证明当前题目的 local repair；若这个缺口是阻塞 chapter readiness 的重要核心弱点，Revision 即使改为 `CORRECT` 也不能单独作为 independent verification。
+## 20. Rudin Appendix Must Be Covered
 
-## 9. Ordinary Explanation
+**Given** RA01 前几个 blocks 已完成，但 Chapter 1 Appendix 尚未读。  
+**Then** RA01 Core Coverage 仍不完整；必须在 RA01 后续 Rudin block 中覆盖 Appendix 后才能默认 ready。
 
-输入：
+## 21. Rectifiable Curves Must Be Covered
 
-```text
-为什么紧致性会推出有界性？
-```
+**Given** RA09 已完成积分主干，但 `Rectifiable Curves` 尚未读。  
+**Then** RA09 默认不能以 full Rudin coverage 为由推进。
 
-期望：
+## 22. Chapter 8 Late Sections Must Be Covered
 
-- 进行正常解释；
-- 默认不创建评估题记录；
-- 如果讨论形成高价值可复用结论，可以追加一个精炼 `Concept Note`；
-- 不复制完整聊天 transcript。
+**Given** RA11 已学 Power Series / exp-log / trig / Fourier，但 Algebraic Completeness 或 Gamma 尚未完成。  
+**Then** RA11 Rudin Core Coverage 仍未完成；这些 sections 不能永久 optional。
 
-## 10. Historical Query
+## 23. Deferred Is Within the Owning RA
 
-输入：
+**When** reading assignment 写 `Deferred within this RA`。  
+**Then** 它只表示当前 block 暂缓；不能把该 Rudin exposition 留到 owning RA readiness 之后。
 
-```text
-我最近在 RA05 的主要问题是什么？哪些能力已经稳定？
-```
+## 24. Full Rudin Ownership Audit
 
-期望：
+**When** 对 `04_CURRICULUM.md` 做 curriculum review。  
+**Then** Rudin Chapters 1–11 的每个 exposition section 都应有且只有一个 owning RA；Exercises 不要求机械全做。
 
-- 先定位并 fetch `Review Analysis / RA05` 的完整章节页；如果通过 Notion search 找到页面，search 结果只用于定位，不能直接使用 highlight / snippet 作为当前状态；
-- 综合最新 fetch 中的 `Current Strengths`、`Current Weaknesses`、reading states、原 assessment、Revision / Retest 和最近题目证据；
-- 不只依赖当前聊天记忆；
-- 查询本身不创建新题目或新记录。
+## 25. Chapter Ready
 
-## 11. Source Uncertainty
+**Given** owning RA 的全部 Rudin exposition 已 COMPLETED，chapter-specific exit evidence、definition/theorem conditions、boundary、proof/strategy、transfer evidence 齐全，且 blocking weaknesses 已 remediation + independent verification。  
+**Then** Project 可以把 Next 推进下一 RA。
 
-输入：引用一个 Project 无法可靠解析的扫描页、公式或图片。
+## 26. Chapter Not Ready
 
-期望：
+**Given** 任一情况存在：未完成 Rudin owning scope、缺关键 evidence、或仍有 blocking weakness。  
+**Then** Next 留在当前 RA，并明确缺什么。
 
-- 判断为 `UNVERIFIED` 或明确说明来源无法核对；
-- 请求用户提供相关页或截图；
-- 不凭记忆编造定理条件、页码或公式。
+## 27. User May Skip Without Being Marked Ready
 
-## 12. Notion Write Failure
+**When** 用户主动要求跳章。  
+**Then** 允许跳转，但原 RA 不因用户选择而被记录为 ready。
 
-前提：Notion 连接无写权限或写入失败。
+## 28. Analysis123 Section Locator Is Not Enough for Composite Sections
 
-期望：
+**Given** Analysis123 §11 同时包含 compactness/Lebesgue number、uniform continuity、pointwise vs uniform convergence、`C([a,b])`。  
+**Then** routing 必须拆成：RA04 / RA07 / RA10 的不同 atoms；不能只写“§11 → RA10”就视为 coverage 完成。
 
-- 对话可以继续，但明确告知 reading block / 题目 / 更新尚未保存；
-- 不声称已写入 `Review Analysis`；
-- 保留可复制的 reading block、题目、答案和反馈内容，以便连接恢复后补写；
-- 连接恢复后先重新读取章节页再补写或分配 Q number，避免重复记录。
+## 29. Decimal Research Is Split by Skill
 
-## 13. Minimality Check
+**Given** Analysis123 §43.1 同时包含 DCT exercises 与 decimal representation / interval / measure material。  
+**Then** DCT atoms 路由 RA19；representation/cardinality atoms 路由 RA02；Borel/measure atoms路由 RA18；不能整节绑到单一 RA。
 
-检查 Project 和仓库中不存在：
+## 30. Composite Homework Is Routed Item-by-Item Before Use
 
-```text
-后端服务
-代码运行时
-Notion API client
-题目数据库
-Attempt / Session / Exam 实体
-数值化 mastery score
-JSON schema
-CI / scheduler / dashboard
-```
+**Given** §29.3、§72.1、§86.x 等综合题组。  
+**When** Project 选择具体题目。  
+**Then** 必须重新判断该 item 的 prerequisite、concept anchor 和诊断目标，不能因整套题有 section locator 就一次性推送。
 
-系统仍应只依靠自然语言、Project Files、用户教材和 Notion 连接完成完整交互。
+## 31. Analysis123 Significant Material Has an Anchor
 
-## 14. Cross-Chapter Evidence
+**When** curriculum audit 覆盖 Analysis123。  
+**Then** 每个正式 section/homework/exam 有 locator；每个显著 concept/skill/application cluster 还应有 concept anchor；行政文本与纯重复内容除外。
 
-输入：RA05 中的一道证明题同时暴露了 RA00 的量词问题。
+## 32. Concept Anchor and Activation Gate Are Distinct
 
-期望：
+**Given** 一个 advanced atom 的核心 idea 与 RA04 compactness 强相关，但完整理解需要 RA20 Hilbert background。  
+**Then** 可以在 RA04 做 bounded FORWARD preview，activation gate 设为 RA20 后 DEEPEN；不能因为 gate 在 RA20 就把它简单归类为“RA20 内容”。
 
-- RA05 的原题、回答、判断和反馈仍只保留在 RA05 的原记录；
-- RA00 的 Study Record 追加一行 `Cross-Chapter Evidence — from RA05 / Q[number] (date): ...`；
-- 不复制完整题目，不创建跨章节数据库或新的 evidence entity。
+## 33. RA20 Is Not an Advanced-Material Sink
 
-## 15. RA00 Diagnostic-First
+**When** review §§58–86。  
+**Then** distributions/generalized derivatives 应连接 RA08/RA14/RA17/RA18，convolution 连接 RA10/RA19，Fourier transform 连接 RA11/RA19/RA20，compact spectral theory 连接 RA04/RA20，microlocal locality/Fourier/local geometry 分别连接 RA03/RA11/RA13/RA14；RA20 主要承担满足 Hilbert/L2 prerequisite 后的 activation/deepening，而不是所有 advanced atom 的唯一 anchor。
 
-输入：
+## 34. RA12–RA20 Have Durable Pages
 
-```text
-开始 RA00。
-```
+**Given** curriculum 已进入 RA12–RA20。  
+**When** runtime 首次进入其中任一 RA。  
+**Then** `Review Analysis / RAxx` exact page 必须存在并可 fetch；不能因旧 setup 只建到 RA11 而绕过 Notion lifecycle。
 
-期望：
+## 35. Rudin Chapter 9 Split Is Logical
 
-- 先读取 `Review Analysis / RA00` 历史；
-- 无历史时先做少量定义、量词、否定和证明策略诊断，而不是直接布置整段固定教材；
-- 只有诊断显示缺口时，才定向调用 Abbott §1.2 的相关部分；
-- 如果后续布置 reading block，写入 `Reading State: ASSIGNED`；
-- 解释或阅读后用新的独立小题验证，不把“听懂”或“读完”当作掌握证据。
+**Then** Ch9 默认拆分为：RA12 linear maps/differentiability；RA13 contraction + inverse/implicit/rank；RA14 determinant + higher derivatives + differentiation of integrals。每个 section 只属于一个 owning RA。
 
-## 16. Default Workflow Can Be Overridden
+## 36. Rudin Chapter 10 Split Is Logical
 
-输入：
+**Then** Ch10 默认拆分为：RA15 integration/primitive/partition/change of variables；RA16 differential forms/simplexes/chains；RA17 Stokes/closed-exact/vector analysis。
 
-```text
-这次不要先读书，直接给我一道综合题；或者只给我一个 hint。
-```
+## 37. Rudin Chapter 11 Split Is Logical
 
-期望：
+**Then** Ch11 默认拆分为：RA18 measure construction/measurability/simple functions；RA19 integration + convergence machinery；RA20 Riemann comparison/complex integration/L2。
 
-- Project 尊重用户对学习模式的最新请求，不把 READ → ASSESS → REMEDIATE → VERIFY 当作锁定状态机；
-- 如果仍提出正式评估题，依然立即建立 `OPEN` 记录并在回答后完成同一条记录；
-- 用户只请求普通 hint 时，不自动创建 assessment record，也不先查 solution。
+## 38. Abbott Coverage Is Pedagogical, Not Reading Completion
 
-## 17. Rudin Chapter Routing
+**When** Abbott coverage ledger 说某 section 已映射。  
+**Then** 表示 tutor 应有意识利用其独特教学价值；不要求用户逐页阅读或为 Abbott 创建 COMPLETED reading state。
 
-输入：
+## 39. Analysis123 Coverage Is Curriculum-Level, Not Notion Schema
 
-```text
-开始 Rudin 第 3 章。
-```
+**Then** 不创建 `Analysis123 Coverage` database/checkbox/mastery entity。Routing 保存在 `04_CURRICULUM.md`；Notion 只保存实际发生的正式学习记录。
 
-期望：
+## 40. Source Conflict Handling
 
-- 不把它解释成 RA03；
-- 根据 `04_CURRICULUM.md` 识别 Rudin Chapter 3 覆盖 RA05（sequences）与 RA06（series）；
-- 读取 RA05 / RA06 的历史；
-- 从最早尚未完成或当前应该继续的 knowledge chapter 开始；
-- 如果该 unit 已有 `ASSIGNED` reading block，恢复它；否则给出并持久化一个新的有限 Rudin reading block。
+**Given** Analysis123 与 Rudin overlapping core 的 theorem condition / definition 存在冲突或疑点。  
+**Then** 先核对正文；Rudin mathematical content / formal conditions 作为课程 reference。Analysis123 独有高阶内容也必须核对正文，不能凭目录补全。
 
-## 18. Ambiguous Bare Chapter Number
+## 41. Retypeset Rudin Copy Is Not Byte-Level Canonical
 
-输入：
+**Given** 当前 Project Rudin PDF 的 foreword 说明它是重新 typeset 的 working copy，并主动修改过 notation / wording / layout，也可能引入新的 typo。  
+**When** 某处 wording、notation 或排版看起来与 theorem intent 不一致。  
+**Then** 不把该 PDF 的逐字文本当作绝对 authority；保持 Rudin 原始 numbering 与 mathematical content 为课程基准，并在需要时核对原版 Rudin或其他可靠来源。
 
-```text
-开始第三章。
-```
+## 42. Solution Guide Is Non-Canonical Verification
 
-前提：当前 conversation 没有已经建立的 RA 或 Rudin 命名语境。
+**Given** Solution Guide 是独立作者自行撰写的 exercise solutions，并明确可能存在 typo/mistake。  
+**When** guide 与 Rudin formal content、已核验条件或独立正确论证冲突。  
+**Then** guide 不得覆盖更高优先级证据；它只作为 post-attempt verification support。
 
-期望：
+## 43. DEEPEN Formal Question Uses Primary Evidence Owner
 
-- 不自行猜测；
-- 只问一次简短澄清，例如“你指 RA03，还是 Rudin Chapter 3？”；
-- 澄清前不布置 reading block、不写 Notion；
-- 澄清后直接进入对应流程，不要求额外命令格式。
+**Given** 一个 advanced atom 在 RA20 才满足 activation gate，但 formal DEEPEN question 实际主要验证 RA04 compactness capability。  
+**When** Project 决定把它作为正式 assessment。  
+**Then** `Target Evidence` 写明 `Primary RA = RA04`，先 fetch RA04 并在那里分配/创建 Q；RA20 如需记录只追加 `Cross-Chapter Evidence`，不能因为 gate 在 RA20 就把正式 Q 自动归档到 RA20。
 
-如果当前 conversation 已明确一直使用 Rudin chapter number，则后续“第三章”可以沿用该语境，不重复无意义澄清。
+## 44. Advanced Exploration Need Not Create a Formal Q
 
-## 19. Retest Creates New Evidence
-
-前提：RA05/Q7 是一个已经 `COMPLETE` 的 Rudin 教材题。
-
-输入：用户一周后要求重新做这道题以检查是否真的掌握。
-
-期望：
-
-- 保留 RA05/Q7 完整不变；
-- 重新读取最新 Study Record，并分配新的未占用 Q number，例如 Q12；
-- Q12 的 `Retest` 写 `Retest of RA05/Q7 — 检查间隔后的独立掌握`；
-- 用户的新回答、Assessment 和 Feedback 写在 Q12；
-- 不把新回答追加成 Q7 的 Revision。
-
-## 20. Multi-Conversation Q Number Allocation
-
-前提：RA06 在 conversation A 和 conversation B 中都可以继续学习；当前 Notion 最新题号为 Q12。
-
-过程：conversation A 先创建 Q13；conversation B 随后准备创建正式新题。
-
-期望：
-
-- conversation B 出题前重新读取 RA06 最新 Study Record；
-- 看到 Q13 已存在后使用 Q14，而不是根据旧聊天记忆也创建 Q13；
-- 如果存在当前应继续的 OPEN Q13，则优先恢复它，而不是创建 Q14；
-- 不创建 Session / Conversation entity 来解决编号问题；
-- v1 的保证是 sequential resume，不把两个 conversation 完全同时写同一 RAxx 说成原子并发安全；若出现竞争，以最新 Notion 页面为准重新读取和分配。
-
-## 21. Chapter Ready to Advance
-
-前提：某章节已经满足以下条件：
-
-- `04_CURRICULUM.md` 中该 knowledge chapter 的 core reading scope 已由 `COMPLETED` reading blocks 覆盖；
-- chapter-specific `出口证据` 已有直接证据覆盖；
-- 核心定义/定理条件准确；
-- 能处理一个必要条件或反例；
-- 独立完成一个短证明；
-- 在一道有区分度的教材题或综合题中成功迁移；
-- 早先的关键 `PARTIAL` 缺口已经经过 remediation，并在新的独立作答或 Retest 中验证修复；Revision 可以保留为 local repair evidence，但不能代替这一步；
-- 没有关键能力只停留在 explanation-only 或 `UNVERIFIED`。
-
-期望：
-
-- `Current Assessment` 明确说明 core coverage 与当前证据足以继续，而不是只写“做完了”；
-- `Current Strengths` 对应到实际题目证据；
-- 旧错误仍保留在历史，不被抹掉；
-- 明确 optional / deferred 材料不阻塞推进的理由（如有）；
-- `Next` 可以指向下一 knowledge chapter；
-- 不需要机械凑固定题数或 mastery score。
-
-## 22. Chapter Not Ready to Advance
-
-前提 A：用户只完成了某章节前半的 reading block，并在这一小段上已经满足 statement / boundary / proof / transfer，但该章节后续 core reading scope 和 chapter-specific 出口证据尚未覆盖。
-
-前提 B：用户已经读完全部 core reading blocks，也答对了若干定义题，但仍有一个核心证明能力只得到 `PARTIAL`，之后只听过解释，没有独立验证。
-
-前提 C：同一个核心证明能力先得到 `PARTIAL`，用户根据当前反馈完成了 `CORRECT` Revision，但还没有新的独立题、Retest 或其他无当前提示的验证。
-
-期望：
-
-- A 中不得因为“已测部分表现很好”就宣布整章 ready；`Next` 应继续到本章尚未覆盖的 core reading block；
-- B 中不得因为“教材读完了”或“多数题答对”就宣布本章完成；
-- C 中 Revision 可以记录为原题已修复，但该重要核心弱点仍是 readiness blocker，直到出现 independent verification；
-- `Current Assessment` 保持 `PARTIAL` 或 `UNVERIFIED` 等合适语言判断；
-- `Current Weaknesses` 或 `Next` 明确区分缺失的是 content coverage、local repair、独立验证还是其他待修复能力；
-- 如果用户明确要求跳到下一章，可以跳转，但记录为用户路径选择，不写成该章已验证掌握。
-
-## 23. No Independent Attempt
-
-前提：Project 已提出正式 assessment，题目记录为 `OPEN`。
-
-输入之一：
-
-```text
-我不会。
-跳过这题。
-直接给我完整证明。
-```
-
-且用户此前没有 substantive independent attempt。
-
-期望：
-
-- 完成同一条 `OPEN` 记录并改为 `COMPLETE`；
-- `My Answer` 保存真实状态，例如 `No attempt` / `Skipped` / `Requested full solution before attempt`；
-- `Assessment` 使用 `UNVERIFIED`，而不是凭空写 `INCORRECT`；
-- Feedback 明确“尚无独立掌握证据”；
-- 通常不强行填写 `Issue`，除非用户已经提供足够内容支持诊断；
-- 该记录不能作为 readiness 的正向证据；
-- 如果用户要求完整解，尊重请求，但后续只有新的独立验证才能产生 mastery evidence。
-
-## 24. Full End-to-End Chapter Flow and Resume
-
-目标：验证整个 Tutor runtime，而不只是单个组件。
-
-过程：
-
-1. 在一个新或可清理的测试 knowledge chapter 中输入 `开始 RAxx`；
-2. Project 读取 Notion 历史，创建或恢复有限 reading block；
-3. 新 block 在 Notion 中为 `Reading State: ASSIGNED`；
-4. 用户输入“这一段读完了”；
-5. 同一 block 变为 `COMPLETED`；
-6. Project 创建 Q1（或下一个可用 Q）为 `OPEN`；
-7. 用户回答，Q record 原地变为 `COMPLETE`；
-8. 后续自适应 assessment 至少出现一次需要 remediation 的 `PARTIAL` 或等价缺口；
-9. 用户根据反馈通过 Revision 修复原题；如果该缺口是阻塞 readiness 的重要核心弱点，Revision 只算 local repair，随后还必须用新的独立题、Retest 或其他 genuinely unscaffolded answer 完成 independent verification；
-10. 继续完成该 knowledge chapter 的全部 core reading scope 和 chapter-specific 出口证据；
-11. readiness contract 的 core coverage、statement、boundary、proof、transfer、gap closure、independent verification 全部满足；
-12. `Current Assessment / Strengths / Weaknesses / Next` 被正确更新；
-13. 新开一个 Project conversation，再次输入该章节或继续学习请求；如果需要用 Notion search 找页面，必须 search 定位后 fetch exact chapter page，再决定恢复状态。
-
-最终期望：
-
-- 新 conversation 不依赖旧 chat memory，而是通过 `Review Analysis` 正确恢复；
-- 若 Notion search 的 highlight / snippet 与页面当前状态不一致，以最新 page fetch 为准；
-- 已 `COMPLETED` 的 reading blocks 不被重复布置；
-- 已 `COMPLETE` 的题目不被改写；
-- 没有未处理的 `OPEN` 题或 `ASSIGNED` block 时，Project 按 `Next` 进入正确的后续内容或下一 knowledge chapter；
-- 如果任一 core coverage 或 mastery evidence 条件仍缺失，则不能提前 advance；
-- 整个流程不需要后端、数据库、Session entity 或人工复制历史。
-
-## 25. Notion Search Is Locator-Only
-
-前提：`Review Analysis / RAxx` 已存在，并且页面顶部状态近期发生过更新。
-
-过程：
-
-1. 在新的查询或 conversation 中先用 Notion search 查找该章节页；
-2. 记录 search 返回的 page ID / URL 和 highlight；
-3. 随后对 exact page ID / URL 执行完整 fetch；
-4. 根据 fetch 内容决定 `Current Assessment`、`Next`、`Reading State`、`OPEN` 题和下一个 Q number。
-
-期望：
-
-- search 只承担 locator 作用；
-- 即使 search highlight / snippet 是旧状态，也不据此恢复或推进；
-- 最新完整 fetch 是 durable state 的读取依据；
-- 纯定位和读取不创建新 Study Record。
+**Given** DEEPEN 内容主要是 advanced exposition / exploration，当前目标不是形成任何 Rudin readiness/mastery evidence。  
+**When** Project 进行解释、示例或讨论。  
+**Then** 默认不创建 formal Q；普通解释不逐字持久化，只有形成长期值得检索的稳定结论时才可写 Concept Note。
