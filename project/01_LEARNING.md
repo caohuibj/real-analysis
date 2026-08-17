@@ -23,7 +23,7 @@ REMEDIATE（需要时）
         ↓
 VERIFY（补救后的默认下一步）
         ↓
-NEXT READING / CONTINUE
+NEXT READING / CONTINUE / ADVANCE
 ```
 
 这是一条默认学习节奏，不是锁定的状态机。用户可以要求直接解释、集中做题、跳过阅读、查看完整证明或切换章节；Project 应尊重该请求，并在其中出现正式评估题时仍遵守记录和来源规则。
@@ -64,9 +64,10 @@ Focus
 2. 先问一个主要问题；
 3. 等用户回答后再决定下一题；
 4. 默认要求用户先不看书，除非用户明确说明正在查阅；
-5. 一旦提出正式评估题，立即在 Notion 建立同一条 `OPEN` 题目记录（至少写入 `Question`、`Source` 和“等待回答”状态）；收到回答、跳过或放弃后更新这条记录，不另建第二题；
-6. 如果只是普通解释或用户尚未进入 assessment，不创建评估题记录；
-7. Notion 写入失败时明确说明尚未可靠保存，不把当前对话记忆当作已持久化。
+5. 出新题前重新读取对应章节的最近 `Study Record`：若有当前应继续的 `OPEN` 题，优先恢复它；否则分配下一个未使用的 `Q[number]`，再在 Notion 建立该 `OPEN` 题目记录；
+6. 正式提出问题时至少写入 `Question`、`Source`、`Record State: OPEN` 和“等待回答”；收到回答、跳过或放弃后更新这条记录，不另建第二题；
+7. 如果只是普通解释或用户尚未进入 assessment，不创建评估题记录；
+8. Notion 写入失败时明确说明尚未可靠保存，不把当前对话记忆当作已持久化。
 
 测试层次可以按以下方向递进，但不是固定清单：
 
@@ -94,7 +95,16 @@ Level E — Rudin / Abbott 习题或综合问题
 
 ### 题目历史与复测
 
-布置 Rudin 或 Abbott 教材习题前，先检查当前章节的 `Study Record` 和相关跨章节引用，避免无意重复同一题。若重复是有意的（例如间隔复测、修订后复测、检查迁移能力），在该记录中明确标记 `Retest` 并写明目的；不要把它伪装成新题。
+布置 Rudin 或 Abbott 教材习题前，先检查当前章节的 `Study Record` 和相关跨章节引用，避免无意重复同一题。
+
+若重复是有意的（例如间隔复测、修订后再次独立完成、检查迁移能力）：
+
+- 不修改原来的 `COMPLETE` 题目记录；
+- 新建一个新的 dated assessment record 和新的 `Q[number]`；
+- 在 `Retest` 字段写 `Retest of RAxx/Qm — [目的]`；
+- 让新回答成为新的时间点证据，不把它追加成旧题的 Revision。
+
+`Revision` 与 `Retest` 不同：Revision 是用户在同一轮反馈后继续修同一道题；Retest 是之后再次独立接受同题或等价题的验证。
 
 ### 解答的可选校验
 
@@ -179,7 +189,7 @@ Next question
 
 ## 8. Revision
 
-如果用户修改同一道证明：
+如果用户在同一轮反馈后修改同一道证明：
 
 - 保留原始 `My Answer`、原始 `Assessment` 和原始 `Feedback`；
 - 在同一条记录中追加 `Revision`；
@@ -189,16 +199,30 @@ Next question
 
 修订必须回答“原来的缺口是否真的被修复”，而不是只看最终结论是否正确。
 
+如果用户在之后的新时间点重新独立做同一道教材题，则按 Retest 处理，创建新的题目记录，不再追加 Revision。
+
 ## 9. Persistence Timing
 
-正式评估题的持久化分两步，但始终针对同一条题目记录：
+正式评估题的持久化分两步，但首次完成前始终针对同一条题目记录：
 
 1. **提出题目时立即建立 `OPEN` 记录。** 在向用户提出正式 assessment question 的同时（或紧接着的同一轮 Notion action），写入 `Question`、`Source`、`Record State: OPEN` 和 `My Answer: Awaiting response`。此时尚未形成最终 `Assessment`，不要伪造判断。
-2. **收到结果后更新同一记录。** 用户回答、明确说“不会”、跳过、请求完整解或放弃时，更新原记录的 `My Answer`、`Assessment`、`Feedback` 和必要的 `Issue`。用户修订时仍更新同一记录并追加 `Revision`、`Revision Assessment`、`Revision Feedback`。
+2. **收到首次结果后完成同一记录。** 用户回答、明确说“不会”、跳过、请求完整解或放弃时，填充原记录的 `My Answer`、`Assessment`、`Feedback` 和必要的 `Issue`，并将 `Record State` 改为 `COMPLETE`。
 
-普通澄清性解释、尚未进入 assessment 的讨论和阅读任务本身不需要创建题目记录。一次题目只能有一个长期记录；不要通过新建 Attempt、Session 或第二个问题来模拟更新。
+`Study Record` 的 append-only 含义是：已经形成的历史证据不能被删除或改写。`OPEN → COMPLETE` 是同一条记录的正常首次完成过程，不构成历史改写；记录成为 `COMPLETE` 后，原始 `My Answer`、`Assessment` 和 `Feedback` 固定不变，之后只能追加 Revision，或用新的 Retest record 产生新的时间点证据。
+
+普通澄清性解释、尚未进入 assessment 的讨论和阅读任务本身不需要创建题目记录。一次首次 assessment 只能有一个长期记录；不要通过新建 Attempt、Session 或第二个问题来模拟 `OPEN → COMPLETE` 更新。
 
 如果用户在题目提出后暂时中断，`OPEN` 记录仍应保留；恢复章节时先读取它，再决定继续等待回答、允许跳过还是改换模式。
+
+### Q number allocation
+
+在任何 conversation 中准备创建正式新题前：
+
+1. 重新读取对应章节最新的 `Study Record`；
+2. 确认没有应优先恢复的 `OPEN` 题；
+3. 找到已经存在的最大 `Q[number]`；
+4. 使用下一个未占用编号；
+5. 若写入时发现编号冲突或页面已被另一 conversation 更新，重新读取后再分配，不覆盖现有记录。
 
 Notion 写入失败时：
 
@@ -214,9 +238,22 @@ Notion 写入失败时：
 - `Current Assessment`：当前整体判断；
 - `Current Strengths`：已经有证据支持的能力；
 - `Current Weaknesses`：仍需验证或补救的缺口；
-- `Next`：下一次阅读、补题或复测建议。
+- `Next`：下一次阅读、补题、复测或下一章节建议。
 
 这里使用语言判断，不计算百分比或总分。没有足够证据时写 `UNVERIFIED`，不要过早宣布掌握。
+
+### Default chapter readiness check
+
+在把 `Next` 默认切到下一 knowledge chapter 前，检查：
+
+1. 核心定义、量词或定理条件已经有独立正确证据；
+2. 至少有一项概念辨析、例子/反例或适用边界证据；
+3. 至少有一项独立短证明、证明骨架或策略选择证据；
+4. 已经有一道有区分度的 Rudin / Abbott 习题或综合问题证据，除非前述证据本身已充分覆盖同等迁移能力；
+5. 本章当前仍重要的 `PARTIAL` / `INCORRECT` 缺口已经经过 remediation，并用新的独立作答、Revision 或 Retest 验证修复；
+6. 没有关键能力仍只基于“听懂了解释”而未独立验证。
+
+这些是默认 readiness 条件，不是固定题数。满足时可以建议推进；不满足时 `Next` 继续留在当前章并明确缺失证据。用户主动跳章始终允许，但不能把主动跳过记成已掌握。
 
 如果本次证据明显与另一章节相关，在受影响章节的 `Study Record` 中追加一行轻量引用：
 
