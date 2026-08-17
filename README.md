@@ -80,6 +80,14 @@ Analysis123 采用两层 coverage：
 
 高阶 Analysis123 内容使用 concept anchor + activation gate：可以在较早 RA 做 bounded forward preview，等 prerequisite 满足后再 deepen，避免全部挤到 RA20。
 
+### DEEPEN evidence ownership
+
+Activation gate 只决定某个 advanced atom **何时可以完整展开**，不改变它最自然的 concept/evidence owner。
+
+- 如果 DEEPEN 中的正式问题主要验证一个已经属于某个 Rudin RA 的能力，`Target Evidence` 必须写明 primary RA，正式 Q record 存在该 primary RA；当前或其他相关 RA 只追加轻量 `Cross-Chapter Evidence`；
+- 如果内容主要是 advanced enrichment / exploration，而不是要形成 Rudin mastery evidence，默认不建立 formal Q，可在确有长期价值时保存 Concept Note；
+- 不因为 activation gate 很晚，就把所有正式 evidence 自动塞进 RA20。
+
 ## Notion setup
 
 建立父页面：
@@ -188,11 +196,10 @@ RA00 是 proof-language entry，不代表 Rudin Chapter 0。
 
 ## Source reliability
 
-- Rudin 是 curriculum 和 overlapping formal theorem 的 canonical source；
+- **Rudin 的数学内容与原始 numbering 是 curriculum / overlapping core 的 canonical reference。** 当前 Project 使用的 Rudin PDF 是一个重新排版并主动修改了若干 notation / wording / layout 的 working copy；它保持 theorem / definition / exercise / section numbering，但该具体 PDF 的每个字符、措辞和排版不能视为逐字 canonical。遇到可疑 wording、notation 或 typo 时，应回到原版 Rudin 或其他可靠来源核验；
 - Abbott 用于概念教学，不替代 Rudin formal conditions；
-- Analysis123 高阶内容正式推送前需要查看对应正文，不能只凭目录标题补 theorem；
-- 课程讲义本身存在笔误，尤其后半部分，遇到冲突必须核对；
-- Solution Guide 只作 post-attempt verification。
+- Analysis123 高阶内容正式推送前需要查看对应正文，不能只凭目录标题补 theorem；讲义本身存在笔误，尤其后半部分，遇到冲突必须核对；
+- **Solution Guide 是 non-canonical 的 post-attempt verification support。** 它只在 substantive attempt 后或用户明确要求 reference/full solution 时使用；若其解答与 Rudin、已核验定理条件或独立正确论证冲突，不得仅因为 guide 给出某个答案就覆盖这些更高优先级证据。
 
 ## Acceptance
 
@@ -202,4 +209,4 @@ RA00 是 proof-language entry，不代表 Rudin Chapter 0。
 acceptance/SCENARIOS.md
 ```
 
-其中包括：reading resume、OPEN/COMPLETE、Revision/Retest、UNVERIFIED、full Rudin coverage、RA12–RA20 persistence、Abbott/Analysis123 tutor-only sourcing、atom routing 与 advanced-material anti-sink checks。
+其中包括：reading resume、OPEN/COMPLETE、Revision/Retest、UNVERIFIED、full Rudin coverage、RA12–RA20 persistence、Abbott/Analysis123 tutor-only sourcing、atom routing、advanced-material anti-sink、source reliability 与 DEEPEN evidence ownership checks。
