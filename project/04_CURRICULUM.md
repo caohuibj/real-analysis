@@ -13,6 +13,10 @@
 
 Rudin 决定课程的数学主线、定义框架和主要习题流。Abbott 只在相应知识节点上提供第二解释层。
 
+### Chapter naming
+
+`RAxx` 是本 Project 的 knowledge chapter；`Rudin Chapter n / Rudin 第 n 章` 是教材章节。一个 Rudin chapter 可能映射到多个 knowledge chapters，例如 Rudin Chapter 3 分成 RA05（sequences）和 RA06（series）。运行时解析规则见 `00_PROJECT.md`；本文件只提供映射关系。
+
 ## 2. Knowledge Chapters and Source Mapping
 
 ### RA00 — Proof Language
@@ -417,7 +421,7 @@ Rudin Chapters 9–11（several variables、differential forms、Lebesgue theory
 
 Project 不应把上面的 knowledge chapter 一次全部布置给用户。进入或恢复章节时，先读取 `Review Analysis / RAxx` 的顶部状态和最近 Study Record，再选择一个自然且有限的 Rudin reading block；没有历史时才使用该章节的首个自然 block。通常由相邻的一小组定义、定理或 section 构成。
 
-布置教材习题前先检查历史，避免无意重复；若确有复测目的，在记录中明确标记 `Retest`。
+布置教材习题前先检查历史，避免无意重复；若确有复测目的，按照 `01_LEARNING.md` / `03_NOTION.md` 新建 Retest record 并引用原题，不改写原来的 COMPLETE 记录。
 
 例如 RA05 可以自然拆成：
 
@@ -462,16 +466,21 @@ RA09 可以例外地先建议 Abbott §7.1–§7.2 作为 Riemann integral 的�
 
 ## 6. Chapter Completion Evidence
 
-“完成章节”不是读完页数，而是目前已有足够证据支持继续。通常需要覆盖：
+“完成章节”不是读完页数，也不是连续答对若干基础题，而是目前已有足够证据支持继续。**正式的默认 readiness contract 以 `02_REVIEW.md §8` 为准。** 本文件中的“出口证据”用于说明各章应该验证什么数学能力。
 
-1. 一个核心定义或定理的准确陈述；
-2. 一个假设辨析、例子或反例；
-3. 一个短证明、证明骨架或工具选择；
-4. 一个 Rudin / Abbott 习题或综合问题（是否需要由前面回答决定；若使用已有题目，必须明确标记 `Retest`）。
+默认 readiness 至少要覆盖以下能力方向：
 
-解答 reference 不是完成章节的必需证据，也不应在用户没有 substantive attempt 时提前使用。
+1. 核心定义、量词或关键定理条件的准确独立陈述；
+2. 假设辨析、适用边界、例子或反例；
+3. 独立短证明、证明骨架或策略选择；
+4. 一道有区分度的 Rudin / Abbott 习题或综合问题，或者已有证明题已明显覆盖同等迁移能力；
+5. 本章仍重要的 `PARTIAL` / `INCORRECT` 缺口必须经过 remediation，并由新的独立作答、Revision 或 Retest 验证修复。
 
-这四类是能力覆盖方向，不是固定题数。若用户在基础问题上出现缺口，应先补救，不为了“完成四题”而继续升级。
+解答 reference 不是完成章节的必需证据，也不应在用户没有 substantive attempt 时提前使用。“听懂了解释”本身也不是完成证据，除非随后有独立验证。
+
+这些是能力覆盖方向，不是固定题数。一道高质量问题可以提供多类证据；若用户在基础问题上出现缺口，应先补救，不为了“完成四题”而继续升级。
+
+默认 readiness 不成立时，`Next` 继续留在当前 knowledge chapter，并明确缺失的证据或待修复能力；用户仍可主动跳章，但该选择不能被记录成“已经验证掌握”。
 
 ## 7. Source Mapping Rule
 
