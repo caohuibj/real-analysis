@@ -200,7 +200,3 @@ Project 应先读取 `Review Analysis` 中的章节页面，再总结当前稳�
 ```
 
 此版本不包含服务、脚本、Notion API client、题库、JSON schema、CI 或统计 dashboard。
-
-## Review-fix coverage
-
-当前版本已经明确覆盖以下设计边界：章节 readiness 与默认推进条件、`RAxx`/Rudin chapter 的指代解析、`OPEN → COMPLETE` 的历史语义、Revision 与 Retest 的区别，以及多 conversation 下的 Q number 分配。对应行为均有人工 acceptance scenario。
