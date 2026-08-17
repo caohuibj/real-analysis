@@ -76,6 +76,8 @@ YYYY-MM-DD / —
 - 同一轮根据反馈继续修：使用原题的 `Revision`；
 - 之后有意复测：创建新的 Q record，写 `Retest of RAxx/Qm — [purpose]`，保留两个时间点的独立证据。
 
+Revision 与 Retest 的证据角色不同：Revision 证明当前题目在反馈后被局部修复；Retest 或新的无提示问题可以提供后续 independent verification。若一个重要核心弱点会阻塞 chapter readiness，Revision alone 不能关闭该 blocker。
+
 ## 4. Evidence Rules
 
 ### 正向证据
@@ -86,8 +88,8 @@ YYYY-MM-DD / —
 - 能准确说出定理假设；
 - 能选择合适的证明策略；
 - 能独立完成证明或构造反例；
-- 修改后真正修复了先前的逻辑或严谨性缺口；
-- 在 Retest 或新情境中再次稳定使用同一能力。
+- Revision 后当前题目的逻辑或严谨性缺口确实被修复（local repair evidence）；
+- 在 Retest、新问题或其他不依赖当前提示的情境中再次稳定使用同一能力（independent verification）。
 
 ### 负向证据
 
@@ -141,14 +143,15 @@ Concept Note 不是评估题，不能替代用户独立回答产生的证据。
 
 用户再次进入章节时：
 
-1. 先读取页面顶部当前判断（包括 `Current Assessment`、`Current Strengths`、`Current Weaknesses` 和 `Next`）；
-2. 读取最近的 Study Record，并检查是否有 `Reading State: ASSIGNED` 的未完成 reading block、`OPEN` 题目、Retest 记录或跨章节引用；
-3. 若有未完成的 `ASSIGNED` reading block，优先恢复它；如果该 block 已明确 `COMPLETED`，再根据 assessment history 决定后续；
-4. 找出尚未验证的弱点和已有的正向证据；
-5. 若有当前应继续的 `OPEN` 题，且没有更早需要完成的阅读状态问题，优先恢复它，不创建重复题；
-6. 再决定是继续当前 block、先补救、进行 Retest，还是选择新的 reading block；
-7. 设计下一道能区分“真正稳定”和“刚刚听懂”的题；
-8. 不要求用户重新提交整页历史。
+1. 定位对应的 `Review Analysis / RAxx` 页面；如果先通过 Notion search 找到页面，search 结果只作为 locator，必须再 fetch 该 exact chapter page，不能用 search highlight / snippet 判断当前状态；
+2. 从最新 fetch 的页面读取顶部当前判断（包括 `Current Assessment`、`Current Strengths`、`Current Weaknesses` 和 `Next`）；
+3. 读取最近的 Study Record，并检查是否有 `Reading State: ASSIGNED` 的未完成 reading block、`OPEN` 题目、Retest 记录或跨章节引用；
+4. 若有未完成的 `ASSIGNED` reading block，优先恢复它；如果该 block 已明确 `COMPLETED`，再根据 assessment history 决定后续；
+5. 找出尚未验证的弱点和已有的正向证据；
+6. 若有当前应继续的 `OPEN` 题，且没有更早需要完成的阅读状态问题，优先恢复它，不创建重复题；
+7. 再决定是继续当前 block、先补救、进行 Retest，还是选择新的 reading block；
+8. 设计下一道能区分“真正稳定”和“刚刚听懂”的题；
+9. 不要求用户重新提交整页历史。
 
 没有历史时，才依据 `04_CURRICULUM.md` 从该章节的首个自然 block 开始。
 
@@ -167,7 +170,7 @@ Project 默认只有在以下条件都满足时，才把章节视为 **ready to 
 3. **Boundary evidence**：至少有一项概念区分、适用条件、例子或反例证据，能表明不是只会背陈述；
 4. **Proof evidence**：至少有一项独立短证明、证明骨架或策略选择证据；
 5. **Transfer evidence**：至少有一道有区分度的 Rudin / Abbott 习题或综合问题，或者现有证明题已经明显覆盖同等迁移能力；
-6. **Gap closure**：本章当前仍重要的 `PARTIAL` / `INCORRECT` 缺口已经经过 remediation，并通过新的独立作答、Revision 或 Retest 验证修复；
+6. **Gap closure**：本章当前仍重要的 `PARTIAL` / `INCORRECT` 缺口已经经过 remediation。Revision 可以作为该题已修复的 local repair evidence；如果该缺口是阻塞 readiness 的重要核心弱点，还必须通过新的独立题、Retest 或其他 genuinely unscaffolded answer 完成 independent verification，不能仅凭同轮 Revision 关闭；
 7. **No explanation-only or unverified mastery**：没有关键能力仍只基于“听懂解释”或 `UNVERIFIED` 状态而缺少独立验证。
 
 这些是能力和内容覆盖条件，不是固定题数，也不是要求每章机械做七题。一个高质量问题可以同时覆盖多个 chapter-specific 出口证据和多个能力类别；若某项在该章节确实不适用，应在 `Current Assessment` 中说明为什么。
@@ -195,7 +198,7 @@ Cross-Chapter Evidence — from RA05 / Q12 (2026-08-17)
 
 `Q[number]` 是章节页内的轻量引用标识，不是独立实体。为了支持一个章节拆成多个 conversation：
 
-1. 创建任何正式新题前重新读取该章节最新的 `Study Record`；
+1. 创建任何正式新题前重新读取该章节最新的 `Study Record`；如果先通过 search 定位页面，先 fetch exact chapter page；
 2. 若有当前应恢复的 `OPEN` 题，优先恢复；
 3. 否则找到最大已存在 Q number，使用下一个未占用编号；
 4. 如果写入时发现页面刚被另一 conversation 更新或编号已占用，重新读取后再分配；
