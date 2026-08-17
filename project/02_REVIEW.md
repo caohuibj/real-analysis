@@ -32,12 +32,13 @@
 
 ## 3. Study Record
 
-所有评估题和用户的有效回答按时间保存在 `## Study Record`。正式评估题在提出时先建立 `OPEN` 记录，首次回答后完成同一条记录。
+所有 reading blocks、评估题和用户的有效回答按时间保存在 `## Study Record`。正式评估题在提出时先建立 `OPEN` 记录，首次回答后完成同一条记录。
 
 这里的历史规则是 **append-only at the evidence level**：
 
+- reading block 新布置时写 `Reading State: ASSIGNED`，用户明确完成后把同一 block 更新为 `COMPLETED`；`COMPLETED` 后不再改回 `ASSIGNED`；
 - `OPEN → COMPLETE` 是同一条题目记录的首次完成过程，可以填充原先空着的答案、判断和反馈；
-- 一旦记录成为 `COMPLETE`，原始 `My Answer`、`Assessment`、`Feedback` 不再删除或改写；
+- 一旦题目记录成为 `COMPLETE`，原始 `My Answer`、`Assessment`、`Feedback` 不再删除或改写；
 - 同一轮反馈后的修改作为 `Revision` 追加到该记录；
 - 之后再次独立做同一道教材题属于 `Retest`，必须新建新的 dated assessment record，并引用原题；
 - 已经形成的历史证据不删除、不覆写成“最终正确版本”。
@@ -55,7 +56,15 @@ Rudin:
 Reading Focus:
 - [重点一]
 - [重点二]
+
+Reading State:
+ASSIGNED / COMPLETED
+
+Completed:
+YYYY-MM-DD / —
 ```
+
+恢复章节时，最近仍为 `ASSIGNED` 的 reading block 表示已经布置但尚未明确完成，应优先继续该 block，而不是猜测用户已经读完或直接布置下一段。
 
 随后逐题追加。题目格式见 `03_NOTION.md`。
 
@@ -92,6 +101,8 @@ Reading Focus:
 
 一次偶然错误不应被写成稳定的长期缺陷。当前判断要区分“本题暴露的问题”和“跨题、跨次学习仍然出现的问题”。
 
+`UNVERIFIED` 表示当前缺少可作为 mastery evidence 的独立证据。它既可以来自无法可靠核对的来源，也可以来自用户明确说“不会”、跳过、放弃或在没有独立尝试时直接要求完整解。后一类情况不是 `INCORRECT`，因为没有可判断的错误答案；同样也不能作为 readiness 的正向证据。
+
 ## 5. Updating the Page
 
 每次完成有诊断价值的测试后：
@@ -104,6 +115,8 @@ Reading Focus:
 6. 如果本次证据与另一章节有关，在相关章节的 `Study Record` 追加 `Cross-Chapter Evidence — from RAxx / Qn (date): ...`；源记录仍是唯一完整证据，不复制整条记录。
 
 如果本次回答没有改变对章节的判断，只需完成题目记录，不要为了形式重复重写顶部。
+
+Reading block 的状态更新不等于 mastery evidence：`COMPLETED` 只说明用户明确表示该段已经读完，不能替代后续 assessment。
 
 ## 6. Concept Notes
 
@@ -129,12 +142,13 @@ Concept Note 不是评估题，不能替代用户独立回答产生的证据。
 用户再次进入章节时：
 
 1. 先读取页面顶部当前判断（包括 `Current Assessment`、`Current Strengths`、`Current Weaknesses` 和 `Next`）；
-2. 读取最近的 Study Record，并检查是否有 `OPEN` 题目、未完成的 reading block、Retest 记录或跨章节引用；
-3. 找出尚未验证的弱点和已有的正向证据；
-4. 若有当前应继续的 `OPEN` 题，优先恢复它，不创建重复题；
-5. 再决定是继续当前 block、先补救、进行 Retest，还是选择新的 reading block；
-6. 设计下一道能区分“真正稳定”和“刚刚听懂”的题；
-7. 不要求用户重新提交整页历史。
+2. 读取最近的 Study Record，并检查是否有 `Reading State: ASSIGNED` 的未完成 reading block、`OPEN` 题目、Retest 记录或跨章节引用；
+3. 若有未完成的 `ASSIGNED` reading block，优先恢复它；如果该 block 已明确 `COMPLETED`，再根据 assessment history 决定后续；
+4. 找出尚未验证的弱点和已有的正向证据；
+5. 若有当前应继续的 `OPEN` 题，且没有更早需要完成的阅读状态问题，优先恢复它，不创建重复题；
+6. 再决定是继续当前 block、先补救、进行 Retest，还是选择新的 reading block；
+7. 设计下一道能区分“真正稳定”和“刚刚听懂”的题；
+8. 不要求用户重新提交整页历史。
 
 没有历史时，才依据 `04_CURRICULUM.md` 从该章节的首个自然 block 开始。
 
@@ -142,25 +156,26 @@ Concept Note 不是评估题，不能替代用户独立回答产生的证据。
 
 ## 8. Chapter Readiness
 
-READ → ASSESS → REMEDIATE → VERIFY → ADVANCE 是默认节奏，不是锁定机制。默认建议进入下一 knowledge chapter 时，必须有足够证据支持，而不能只因为阅读范围结束或连续几题答对。
+READ → ASSESS → REMEDIATE → VERIFY → ADVANCE 是默认节奏，不是锁定机制。默认建议进入下一 knowledge chapter 时，必须同时有足够的**内容覆盖**与**能力证据**，不能只因为阅读范围结束或连续几题答对。
 
 ### 默认 readiness contract
 
 Project 默认只有在以下条件都满足时，才把章节视为 **ready to advance**：
 
-1. **Core statement evidence**：核心定义、量词结构或关键定理假设/结论已有独立正确证据；
-2. **Boundary evidence**：至少有一项概念区分、适用条件、例子或反例证据，能表明不是只会背陈述；
-3. **Proof evidence**：至少有一项独立短证明、证明骨架或策略选择证据；
-4. **Transfer evidence**：至少有一道有区分度的 Rudin / Abbott 习题或综合问题，或者现有证明题已经明显覆盖同等迁移能力；
-5. **Gap closure**：本章当前仍重要的 `PARTIAL` / `INCORRECT` 缺口已经经过 remediation，并通过新的独立作答、Revision 或 Retest 验证修复；
-6. **No explanation-only mastery**：没有关键能力仍只基于“听懂解释”而缺少独立验证。
+1. **Core coverage**：`04_CURRICULUM.md` 中该 knowledge chapter 的 core reading scope 已经通过一个或多个 `COMPLETED` reading blocks 覆盖，并且该章列出的 chapter-specific `出口证据` 已有直接证据覆盖。明确标为 optional / deferred 的材料可以不阻塞推进，但应在 `Current Assessment` 中注明；不能因为只掌握了一个早期 reading block 就把整章判为 ready；
+2. **Core statement evidence**：核心定义、量词结构或关键定理假设/结论已有独立正确证据；
+3. **Boundary evidence**：至少有一项概念区分、适用条件、例子或反例证据，能表明不是只会背陈述；
+4. **Proof evidence**：至少有一项独立短证明、证明骨架或策略选择证据；
+5. **Transfer evidence**：至少有一道有区分度的 Rudin / Abbott 习题或综合问题，或者现有证明题已经明显覆盖同等迁移能力；
+6. **Gap closure**：本章当前仍重要的 `PARTIAL` / `INCORRECT` 缺口已经经过 remediation，并通过新的独立作答、Revision 或 Retest 验证修复；
+7. **No explanation-only or unverified mastery**：没有关键能力仍只基于“听懂解释”或 `UNVERIFIED` 状态而缺少独立验证。
 
-这些是能力覆盖条件，不是固定题数，也不是要求每章机械做四题。若一题同时提供多类高质量证据，可以覆盖多项；若某项在该章节确实不适用，应在 `Current Assessment` 中说明为什么。
+这些是能力和内容覆盖条件，不是固定题数，也不是要求每章机械做七题。一个高质量问题可以同时覆盖多个 chapter-specific 出口证据和多个能力类别；若某项在该章节确实不适用，应在 `Current Assessment` 中说明为什么。
 
 ### readiness 结果
 
-- **Ready**：`Current Assessment` 写明目前证据足以继续，`Next` 可以指向下一 knowledge chapter；
-- **Not ready**：`Current Assessment` 保持 `PARTIAL` 或 `UNVERIFIED` 等语言判断，`Next` 必须留在本章并明确缺失的证据或待修复问题；
+- **Ready**：`Current Assessment` 写明 core coverage 和当前能力证据足以继续，`Next` 可以指向下一 knowledge chapter；
+- **Not ready**：`Current Assessment` 保持 `PARTIAL` 或 `UNVERIFIED` 等语言判断，`Next` 必须留在本章并明确缺失的是 reading/content coverage、独立证据还是待修复问题；
 - **User override**：用户始终可以主动跳到其他章节，但这只能记录为学习路径选择，不能写成“本章已验证掌握”。
 
 建议进入下一章只表示目前证据足够支持继续，不表示旧章节永远不会复习。
@@ -186,11 +201,13 @@ Cross-Chapter Evidence — from RA05 / Q12 (2026-08-17)
 4. 如果写入时发现页面刚被另一 conversation 更新或编号已占用，重新读取后再分配；
 5. 不允许多个 conversation 仅根据各自聊天记忆猜测“下一题号”。
 
+v1 支持的是跨 conversation 的顺序恢复，不承诺同一 RAxx 中两个 conversation 同时创建正式题目的原子并发安全。应避免这种同时写入；发生竞争时以最新章节页为准重新读取和分配。
+
 这样保持跨章节引用稳定，同时不引入 Question database 或 Session entity。
 
 ## 11. No Extra Entities
 
-章节页内部的题目、答案、反馈、修订和 Issue 都是 Markdown 记录，不创建：
+章节页内部的 reading block、题目、答案、反馈、修订和 Issue 都是 Markdown 记录，不创建：
 
 ```text
 Question database
