@@ -144,6 +144,17 @@ Target Evidence
 
 如果题目来自 Abbott / Analysis123，`Question` 必须保存足够的自包含题干；不依赖用户另开教材才能知道题目是什么。
 
+### Cross-RA DEEPEN targeting
+
+如果一个 formal question 来自 late-gated `DEEPEN`，但主要验证的是较早 RA 已经拥有的 Rudin capability：
+
+- 在 `Target Evidence` 中写明 `Primary RA = RAxx`；
+- 正式 Q record 创建在该 primary RA 页面，而不是因为当前 activation gate 或当前 conversation 位于 RA20 就自动写入 RA20；
+- 当前或其他相关 RA 如需保留关联，只追加 `Cross-Chapter Evidence` 轻量引用；
+- 创建 Q 前，仍必须对 **primary RA page** 执行最新 fetch、OPEN 检查和 Q-number allocation。
+
+如果 DEEPEN 主要是 advanced exposition / exploration，而不是为了形成 Rudin mastery evidence，则默认不创建 formal Q；普通解释不逐字保存，确有长期价值时可写 Concept Note。
+
 ## 7. Completing an OPEN Record
 
 用户首次回答后，在同一 record 中补齐并改为 COMPLETE：
@@ -241,6 +252,8 @@ Question
 
 不能根据当前聊天记忆猜 Q number。
 
+Cross-RA DEEPEN formal question 以其 `Primary RA` 为上述 allocation 的目标页面。
+
 ## 12. Tutor-Side Evidence
 
 Abbott / Analysis123 的普通解释聊天默认不逐字保存。
@@ -292,6 +305,8 @@ Cross-Chapter Evidence — from RAxx / Qn (YYYY-MM-DD): [compressed conclusion]
 ```
 
 不复制完整答案，不创建新实体。
+
+对于 DEEPEN formal Q，完整 record 始终留在 Primary RA；其他相关页面只保留这种轻量引用，避免 late-gated material 形成新的 persistence sink。
 
 ## 15. Concept Notes
 
