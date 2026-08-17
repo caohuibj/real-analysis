@@ -1,267 +1,315 @@
-# Review Analysis 的 Notion 结构与写入规则
+# Notion Persistence Rules
 
-## 1. Structure
+## 1. Purpose
 
-Notion 只需要一个顶层页面和章节子页面：
+Notion `Review Analysis` 是本 Project 的 durable learning record。
+
+本文件只定义现有页面结构、reading lifecycle、assessment lifecycle、读取/写入规则。不创建新的数据库或额外 mastery schema。
+
+## 2. Review Analysis Structure
+
+`Review Analysis` 下按 knowledge chapter 建普通页面：
 
 ```text
-Review Analysis
-├── RA00 — Proof Language
-├── RA01 — Real Numbers & Completeness
-├── RA02 — Countability
-├── RA03 — Metric Topology
-├── RA04 — Compactness & Connectedness
-├── RA05 — Sequences
-├── RA06 — Series
-├── RA07 — Continuity
-├── RA08 — Differentiation
-├── RA09 — Integration
-├── RA10 — Function Sequences
-└── RA11 — Approximation, Power Series & Special Functions
+RA00 — Proof Language
+RA01 — Real Numbers & Completeness
+RA02 — Countability and the Infinite
+RA03 — Metric Spaces and Topological Structure
+RA04 — Compactness, Perfectness & Connectedness
+RA05 — Sequences and Completeness
+RA06 — Numerical Series
+RA07 — Limits and Continuity
+RA08 — Differentiation
+RA09 — Riemann and Riemann–Stieltjes Integration
+RA10 — Sequences and Series of Functions
+RA11 — Approximation, Power Series & Special Functions
+RA12 — Multivariable Linear Structure & Differentiability
+RA13 — Contraction, Inverse / Implicit / Rank Theorems
+RA14 — Determinants, Higher Derivatives & Parameter Dependence
+RA15 — Integration in Euclidean Space & Change of Variables
+RA16 — Differential Forms, Simplexes & Chains
+RA17 — Stokes, Closed / Exact Forms & Vector Analysis
+RA18 — Measurable Structure & Measure Construction
+RA19 — Lebesgue Integration, Convergence & Product Measures
+RA20 — Riemann Comparison, Complex Integration & L2 / Functional Viewpoint
 ```
 
-这些是普通 Notion pages，不是数据库。章节名称可以按实际教材或个人习惯调整，但不要因此增加新的数据实体。
+页面名和 exact RA mapping 以 `04_CURRICULUM.md` 为准。
 
-## 2. Chapter Page Template
+在 runtime 真正进入某个 RA 之前，对应 `Review Analysis / RAxx` 页面必须存在并可 fetch。若缺页，应先创建/修复该普通页面，而不是绕过 durable state 直接开始正式学习。
 
-每个章节页使用以下顺序：
+## 3. Chapter Page Template
 
-```markdown
-# RAxx — [Chapter Name]
+```text
+# RAxx — [name]
 
-## Current Assessment
-尚无证据。
+Current Assessment
+[当前总体判断]
 
-## Current Strengths
-- 尚无记录。
+Current Strengths
+- ...
 
-## Current Weaknesses
-- 尚无记录。
+Current Weaknesses
+- ...
 
-## Next
-开始本章节的 Rudin 阅读任务。
+Next
+[下一步]
 
-## Study Record
+Study Record
+
+[dated reading / assessment records appended below]
 ```
 
-Project 可以根据新证据改写顶部四个区块。`Study Record` 的历史证据遵守 append-only 语义：reading block 可以从 `ASSIGNED` 完成到 `COMPLETED`；题目 `OPEN` 记录在首次回答前允许原地完成；题目成为 `COMPLETE` 后，原始答案、判断和反馈不得改写，只能追加 Revision，或者用新的 Retest record 形成新的时间点证据。
+顶部字段是当前压缩状态；Study Record 是不可随意覆盖的历史。
 
-## 3. Reading Block
+## 4. Read Before Acting
 
-每次新阅读开始时，在 `Study Record` 下追加：
+进入/恢复章节时：
 
-```markdown
-### YYYY-MM-DD — Reading Block
+1. 如果需要，用 Notion search 找到 `Review Analysis / RAxx`；
+2. search 只作 locator；
+3. 必须 fetch exact chapter page；
+4. `Current Assessment`、`Next`、`Reading State`、`OPEN` Q 和 Q number 都以最新完整 fetch 为准。
 
-Rudin:
-[章节、小节、定理范围]
+创建新正式 assessment question 前，再 fetch 一次最新章节页，避免多个 conversation 各自猜题号。
 
-Reading Focus:
-- [定义、量词或对象]
-- [定理假设与结论]
-- [需要重建的证明结构]
+## 5. Reading Block Record
 
-Deferred:
-- [暂时不要求的材料]
+正式 reading block 永远是 Rudin block。
 
-Reading State:
-ASSIGNED
+```text
+Reading Block — YYYY-MM-DD
 
-Completed:
-—
+Rudin
+[chapter / section / theorem range]
+
+Reading Focus
+- ...
+
+Deferred within this RA
+- [当前 block 暂不读，但 owning RA readiness 前必须覆盖的 Rudin exposition]
+
+Reading State
+ASSIGNED / COMPLETED
+
+Assigned
+YYYY-MM-DD
+
+Completed
+YYYY-MM-DD / —
 ```
 
-### Reading lifecycle
+### Lifecycle
 
-- 新 reading block 一旦正式布置，立即写 `Reading State: ASSIGNED`；
-- 用户明确说“这一段读完了”或等价完成信号后，更新**同一个** reading block 为 `Reading State: COMPLETED`，并把 `Completed` 写为实际日期；
-- `COMPLETED` 后不再改回 `ASSIGNED`；如果之后有意重读，应创建新的 dated Reading Block；
-- `COMPLETED` 只表示用户确认完成阅读，不是 mastery evidence；后续 assessment 仍然必要；
-- 恢复章节时，如果最近存在 `ASSIGNED` reading block，优先恢复它，不创建重复 reading block，也不假设用户已经读完。
+新 block 正式布置：
 
-## 4. Assessment Record
+```text
+Reading State: ASSIGNED
+```
 
-每一个测试问题都单独保留完整记录，包括回答正确的问题：
+用户明确读完：更新 **同一个 block**：
 
-```markdown
-#### Q[number] — [short label]
+```text
+Reading State: COMPLETED
+Completed: YYYY-MM-DD
+```
+
+恢复章节时，存在 `ASSIGNED` block 就优先恢复，不建立新 block。
+
+### Deferred semantics
+
+`Deferred within this RA` 不是 optional list。
+
+- 它只表示当前 block 暂缓；
+- `04_CURRICULUM.md` 中属于该 RA 的 Rudin exposition 最终必须由后续 block 覆盖；
+- 如果仍有 unresolved Rudin deferred，Core Coverage 不能判 complete；
+- Abbott / Analysis123 tutor pushes 不记成 Reading Block。
+
+## 6. Assessment Record
+
+正式问题提出时立即创建：
+
+```text
+Q[number] — YYYY-MM-DD — OPEN
+
+Source
+[Rudin / Abbott / Analysis123 / self-authored / user-provided]
 
 Question
 [完整题目]
 
-Source
-[Rudin / Abbott / exercise / user-provided / self-authored]
-[章节、小节或题号；无法确认时写“待核对”]
-
-Record State
-OPEN / COMPLETE
-
-My Answer
-[题目刚提出时写“等待回答”；之后写用户原始回答或真实的不会、跳过、放弃、请求完整解等状态]
-
-Assessment
-[原始判断：CORRECT / PARTIAL / INCORRECT / UNVERIFIED；题目刚提出时暂留空]
-
-Feedback
-[原始判断的证据、做得好的地方、第一处关键缺口、为什么重要和最小修复；若没有独立作答，说明尚无可验证 mastery evidence]
-
-Issue
-CONCEPT / STRATEGY / LOGIC / RIGOR / EXECUTION；没有足够独立作答证据时通常留空
-
-Retest
-No；如果是后续有意复测，写 `Retest of RAxx/Qm — [目的]`
-
-Solution Reference
-Not consulted；或写“substantive attempt 后核对 / 用户明确要求 reference/full solution 后核对 / unavailable”
-
-Revision
-[同一轮反馈后的后续修订；没有时删除该段或写“无”]
-
-Revision Assessment
-[对修订后的同一题重新判断]
-
-Revision Feedback
-[修订是否修复原缺口，以及新的最小修复]
+Target Evidence
+[definition / boundary / proof / transfer / ...]
 ```
 
-字段是记录语义，不是要求用户填写表单。Project 应在对话中自然完成并写入。
+如果题目来自 Abbott / Analysis123，`Question` 必须保存足够的自包含题干；不依赖用户另开教材才能知道题目是什么。
 
-### 写入细则
+## 7. Completing an OPEN Record
 
-- 创建正式新题前，先重新读取对应章节最新的 `Study Record`；若有当前应继续的 `OPEN` 题，优先恢复，不重复创建；
-- 若确需新题，找到已存在的最大 `Q[number]`，分配下一个未使用编号；若写入时发现页面已由另一 conversation 更新或编号冲突，重新读取后再分配；
-- 正式评估题一旦提出，立即写入同一条 `OPEN` 记录：`Question`、`Source`、`Record State: OPEN`、`My Answer: 等待回答`；
-- 用户首次回答、明确说“不会”、跳过、请求完整解或放弃后，填充这条记录的 `My Answer`、`Assessment`、`Feedback` 和必要的 `Issue`，并把 `Record State` 改为 `COMPLETE`；
-- 如果用户没有提供可判断的独立答案，例如明确说“不会”、跳过、放弃或在独立尝试前直接请求完整解，`Assessment` 使用 `UNVERIFIED`，Feedback 写明“尚无独立掌握证据”；不要把未作答伪装成 `INCORRECT`；
-- `OPEN → COMPLETE` 是同一条记录正常的首次完成，不算覆盖历史；
-- 记录成为 `COMPLETE` 后，原始 `My Answer`、原始 `Assessment` 和原始 `Feedback` 固定不变；
-- `CORRECT` 记录正向证据，不要只保存错误；
-- `PARTIAL` 或 `INCORRECT` 才在确有诊断价值时写 `Issue`；
-- `UNVERIFIED` 也用于来源或提取可靠性不足；无论是哪种原因，都不能算 readiness 的正向证据；
-- 解答是可选校验源：substantive attempt 后或用户明确要求 reference/full solution 后才查阅；普通 hint 不先查解答；解答不可用时不阻塞流程；
-- 用户在同一轮反馈后修改同一道题时，在这个 `COMPLETE` 记录下追加 `Revision`、`Revision Assessment`、`Revision Feedback`，不改写原始字段；
-- Revision 证明的是当前题目在反馈后的局部修复，不自动构成 independent verification；如果该缺口是阻塞 chapter readiness 的重要核心弱点，必须再由新的独立题、Retest 或其他不依赖当前提示的作答提供独立验证；
-- 之后重新独立做同一道教材题属于 Retest：创建新的 Q record，并在 `Retest` 写 `Retest of RAxx/Qm — [目的]`，不要把新时间点证据塞进旧题 Revision；
-- 不要删除原始回答、原始判断或原始反馈，不要用最终证明覆盖第一次作答。
-
-### Revision、Retest 与 independent verification 的边界
+用户首次回答后，在同一 record 中补齐并改为 COMPLETE：
 
 ```text
-Revision
-= 同一轮 assessment 中，用户根据当前反馈继续修同一道题
-= 追加在原 Q record
-= local repair evidence
-= 不单独关闭一个阻塞 readiness 的重要核心弱点
+Q[number] — YYYY-MM-DD — COMPLETE
 
-Retest
-= 之后的新时间点重新独立接受同题或等价题验证
-= 新建新的 Q record，并引用原 Q
-= 可以作为 independent verification
-
-New independent question / genuinely unscaffolded answer
-= 不依赖当前反馈提示，在新问题或新情境中独立使用同一能力
-= 可以作为 independent verification
-```
-
-这样既保留学习轨迹，又不需要 Attempt / Session entity，同时不会把“根据刚收到的提示改对原题”误判成独立掌握。
-
-## 5. Cross-Chapter Evidence
-
-当一个章节中的评估证据对另一个章节也有诊断价值时，在受影响章节的 `Study Record` 中追加一行：
-
-```markdown
-Cross-Chapter Evidence — from RAxx / Q[number] (YYYY-MM-DD)
-[一句话说明该证据支持或暴露的能力]
-```
-
-只保存指向来源题目的轻量引用；完整题目、答案、原始判断、反馈和修订仍只保留在来源章节。不要创建跨章节数据库、复制整条题目记录或把引用当成新的 assessment。
-
-如果后来产生 Retest，新 Retest 有自己的 Q number；需要引用新的时间点证据时，引用新的 Q record，而不是悄悄改写旧引用。
-
-## 6. Concept Note
-
-当普通解释产生了高价值、可复用的结论时，追加：
-
-```markdown
-### Concept Note — [Topic]
+Source
+...
 
 Question
-[真正的问题]
+...
 
-Observed issue
-[原先的混淆]
+Target Evidence
+...
 
-Resolution
-[解释后形成的简洁结论]
+My Answer
+[原始首次回答]
+
+Assessment
+CORRECT / PARTIAL / INCORRECT / UNVERIFIED
+
+Evidence
+[可长期检索的正向 evidence]
+
+Feedback
+[首次反馈]
 ```
 
-不要把整个聊天逐字复制到 Notion。Concept Note 也不能冒充一次独立作答的掌握证据。
+### No-attempt rule
 
-## 7. Persistence Rules
-
-### 必须写入
-
-- Project 实际布置的 reading block，以及它的 `ASSIGNED → COMPLETED` 状态；
-- Project 实际布置并进入 assessment 的问题（题目提出时先写 `OPEN` 记录）；
-- 用户对每道题的原始回答或真实的未答/不会/跳过/放弃/直接请求完整解状态；
-- `CORRECT`、`PARTIAL`、`INCORRECT`、`UNVERIFIED` 的原始判断（能够形成判断时）；
-- 反馈、Issue、Revision、Retest 和正向证据；
-- 影响当前判断的阅读范围和下一步建议。
-
-### 不必逐字写入
-
-- 普通寒暄；
-- 没有形成结论的来回解释；
-- 重复的格式确认；
-- GitHub 的开发过程。
-
-### 写入失败
-
-Notion 连接不可用、权限不足或写入返回失败时：
-
-1. 不声称已经保存；
-2. 在当前回答中说明“本条尚未写入 Review Analysis”；
-3. 保留可复制的 reading block、题目、答案和反馈内容；
-4. 连接恢复后先重新读取章节页，再补写或完成原记录，避免产生重复 reading block 或重复 Q number。
-
-## 8. Retrieval Rules
-
-Notion search 与 page fetch 的职责必须分开：**search 是 locator-only，fetch 才是状态读取。** Search highlight / snippet 可能不是页面的最新完整状态，因此不能据此做 resume、readiness、OPEN 或 Q-number 判断。
+用户明确不会、跳过、放弃，或无独立尝试直接要求完整解：
 
 ```text
-进入或恢复章节
-→ 如果已知 exact page ID / URL，直接 fetch 章节页
-→ 如果未知，先 search 定位 `Review Analysis / RAxx`，然后 fetch exact chapter page
-→ 只使用最新 fetch 中的顶部状态、最近 Study Record、ASSIGNED reading block、OPEN 题目、Retest 记录和跨章节引用来选择下一步
-
-未完成 reading block
-→ 若最新 fetch 中 Reading State = ASSIGNED，优先恢复该 block；只有明确 COMPLETED 后才进入后续 assessment / next reading
-
-创建正式新题
-→ 再次 fetch 最新章节页，确认 OPEN 状态并分配下一个未使用 Q number
-
-当前章节掌握情况
-→ fetch 对应章节页顶部和最近 Study Record
-
-某一道题的历史
-→ fetch 章节页并读取该题的完整记录和 Revision
-
-某项能力是否稳定
-→ 同时查看原 assessment、后续 local Revision、Retest 和其他独立迁移题证据；Revision alone 不等于 independent verification
-
-长期薄弱点
-→ 定位相关章节后 fetch 页面，汇总 Current Weaknesses，并回看相关题目证据
-
-已经掌握的内容
-→ 以最新 fetch 的 Current Strengths 和 CORRECT / verified records 为准
+Assessment: UNVERIFIED
 ```
 
-纯查询不创建新题目或新记录。
+不要写成 INCORRECT。
 
-### Q number concurrency boundary
+## 8. COMPLETE Immutability
 
-多个 conversation 可以顺序恢复同一个 knowledge chapter，但 v1 不提供同一 RAxx 中两个 conversation 同时创建正式题目的原子锁。创建新题前必须 fetch 最新页面；如果发现竞争更新或编号冲突，重新分配，不覆盖已有记录。不要为此引入 Session / Question database。
+一旦 record 成为 COMPLETE：
 
-## 9. Connection Requirement
+- 原始 `My Answer` 不覆盖；
+- 原始 `Assessment` 不覆盖；
+- 原始 `Feedback` 不覆盖；
+- 后续修改只追加 Revision；
+- later independent retest 建新 Q。
 
-本结构依赖一个允许 Project 执行 Notion 写入的连接。只有实际写入动作返回成功后，Project 才能说 reading block、题目或学习记录已经保存。
+## 9. Revision
+
+同一轮反馈后的修改追加在原 Q 下：
+
+```text
+Revision — [optional timestamp]
+[用户修订]
+
+Revision Assessment
+CORRECT / PARTIAL / INCORRECT
+
+Revision Feedback
+[原缺口是否修复]
+```
+
+多次 Revision 按顺序继续追加。
+
+Revision 是 local repair evidence，不自动等于 independent verification。若原 weakness 会阻塞 chapter readiness，即使 Revision CORRECT，也要后续新独立题/Retest 验证。
+
+## 10. Retest
+
+later independent retest 新建 Q：
+
+```text
+Q[new number] — YYYY-MM-DD — OPEN
+Retest of RAxx/Qn — [目的]
+Source
+...
+Question
+...
+```
+
+之后按正常 lifecycle COMPLETE。
+
+不得把 later retest 追加成旧题的 Revision。
+
+## 11. Q Number Allocation
+
+新正式问题之前：
+
+1. fetch latest exact RA page；
+2. 检查是否有 OPEN；
+3. 有 OPEN：恢复，不新建；
+4. 无 OPEN：扫描已用 Q numbers；
+5. 使用下一个未占用 number。
+
+不能根据当前聊天记忆猜 Q number。
+
+## 12. Tutor-Side Evidence
+
+Abbott / Analysis123 的普通解释聊天默认不逐字保存。
+
+以下情况需要持久化：
+
+- 形成正式 assessment question；
+- 用户对 tutor-pushed application/transfer 做了独立 substantive answer；
+- 暴露了新的 core weakness；
+- 形成值得长期检索的 Concept Note；
+- 产生 cross-chapter evidence。
+
+不要创建“Abbott Coverage”“Analysis123 Coverage”之类新的 Notion 状态表。完整素材 routing 属于 `04_CURRICULUM.md` 的静态 curriculum responsibility。
+
+## 13. Current State Update
+
+一轮正式学习后，根据 evidence 更新顶部：
+
+### Current Assessment
+
+压缩当前 readiness 判断，不写成长篇日志。
+
+### Current Strengths
+
+只保存稳定、具体、可迁移的能力。
+
+### Current Weaknesses
+
+保存具体 blocker / uncertainty，并标明若只完成 Revision 但尚未 independent verification。
+
+### Next
+
+必须可执行，例如：
+
+```text
+Continue RA11 — next Rudin block: Algebraic Completeness
+Retest RA05/Q4 Cauchy weakness
+Advance to RA12
+```
+
+如果当前 RA owning 的 Rudin exposition 仍有未完成 block/Deferred，Next 不应默认推进下一 RA。
+
+## 14. Cross-Chapter Evidence
+
+使用轻量引用：
+
+```text
+Cross-Chapter Evidence — from RAxx / Qn (YYYY-MM-DD): [compressed conclusion]
+```
+
+不复制完整答案，不创建新实体。
+
+## 15. Concept Notes
+
+普通解释性聊天不保存。
+
+只有形成长期值得检索的数学结论时，可压缩为 Concept Note，例如：
+
+```text
+Concept Note — [date]
+[稳定结论 / recurring distinction / reusable proof idea]
+```
+
+Concept Note 不是 assessment evidence，除非另有独立作答支持。
+
+## 16. Write Integrity
+
+- 只有 Notion 工具实际返回成功后才能声称“已保存”；
+- 写入失败时如实说明；
+- 不因写入失败而假装状态已更新；
+- 不创建 Question database、Attempt、Session、Score 或额外 mastery schema；
+- 页面结构保持普通 chapter pages + Study Record。
