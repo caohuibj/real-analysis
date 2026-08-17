@@ -111,7 +111,7 @@ Review Analysis
 
 ### 5. 用验收场景检查装配
 
-按 [`acceptance/SCENARIOS.md`](acceptance/SCENARIOS.md) 做一次人工验收。通过后即可开始学习。
+按 [`acceptance/SCENARIOS.md`](acceptance/SCENARIOS.md) 做一次人工验收。场景覆盖章节启动、assessment、Notion 持久化、Revision/Retest、跨 conversation 题号、章节命名歧义和 ready/not-ready 推进判断。通过后即可开始学习。
 
 ## 日常使用
 
