@@ -14,6 +14,7 @@
 
 期望：
 
+- 明确把 `RA01` 当作 knowledge chapter，而不是 Rudin Chapter 1 的别名；
 - 先读取 `Review Analysis / RA01` 的顶部状态和最近 Study Record；
 - 根据历史选择有限的 Rudin 阅读范围；没有历史时才使用首个自然 reading block；
 - 说明阅读重点和暂缓内容；
@@ -34,6 +35,7 @@
 
 - 进入 closed-book 测试；
 - 第一次只提出一个主要问题；
+- 出新题前重新读取章节最新 Study Record，确认没有应恢复的 `OPEN` 题并分配下一个未使用 Q number；
 - 正式提出问题时立即在 `Review Analysis / RA01` 建立 `OPEN` 记录，包含 `Question`、`Source` 和“等待回答”；
 - 不先输出整节总结或完整答案。
 
@@ -56,7 +58,7 @@
 
 - 判断为 `CORRECT`；
 - 简短说明证据；
-- 更新同一条已存在的 `OPEN` 记录，写入原回答、`Assessment` 和 `Feedback`；
+- 更新同一条已存在的 `OPEN` 记录，写入原回答、`Assessment` 和 `Feedback`，并把 `Record State` 改为 `COMPLETE`；
 - 将正向证据写入对应章节页；
 - 根据证据进入更高层次问题，而不是重复同一道基础题。
 
@@ -70,7 +72,8 @@
 - 指出第一处关键缺口；
 - 需要时标记 `RIGOR` 或 `STRATEGY`；
 - 给出最小修复方向和下一道验证题；
-- 将原始回答、反馈和判断写入章节页。
+- 将原始回答、反馈和判断写入章节页；
+- 在缺口未经独立验证修复前，不把章节默认推进为 ready。
 
 ## 6. Incorrect Quantifier or Concept
 
@@ -82,7 +85,8 @@
 - 标记 `LOGIC` 或 `CONCEPT`；
 - 不机械罗列由第一处错误造成的所有后果；
 - 先补救，再重新验证；
-- 原始回答不能被修订覆盖。
+- 原始回答不能被修订覆盖；
+- “听懂解释”本身不能关闭该缺口。
 
 ## 7. Adaptive Difficulty
 
@@ -100,19 +104,20 @@
 - 暂停升级；
 - 调用必要的 Abbott 解释或 Project Source 片段；
 - 通过新的短题确认是否修复；
-- 若需要使用已做过的教材题，明确标记 `Retest` 并说明复测目的；
+- 若需要使用已做过的教材题，创建新的 Retest record，写 `Retest of RAxx/Qm — [目的]`，不改写原记录；
 - 普通 hint 不先查 solution；solution 只在 substantive attempt 后或用户明确要求 reference/full solution 时使用。
 
 ## 8. Revision of the Same Problem
 
-输入：用户根据反馈修改同一道证明。
+输入：用户在当前反馈后立即修改同一道证明。
 
 期望：
 
-- 更新同一条题目记录；
+- 使用同一条题目记录；
 - 保留第一次 `My Answer`、原始 `Assessment` 和原始 `Feedback`；
 - 追加 `Revision`、`Revision Assessment` 和 `Revision Feedback` 并重新判断；
-- 不创建 Attempt、Session 或第二个问题页面。
+- 不创建 Attempt、Session 或第二个问题页面；
+- 不把这次同轮修订错误标记成 Retest。
 
 ## 9. Ordinary Explanation
 
@@ -140,7 +145,7 @@
 期望：
 
 - 先读取 `Review Analysis / RA05`；
-- 综合 `Current Strengths`、`Current Weaknesses` 和最近题目证据；
+- 综合 `Current Strengths`、`Current Weaknesses`、原 assessment、Revision / Retest 和最近题目证据；
 - 不只依赖当前聊天记忆；
 - 查询本身不创建新题目或新记录。
 
@@ -162,7 +167,8 @@
 
 - 对话可以继续，但明确告知记录尚未保存；
 - 不声称已写入 `Review Analysis`；
-- 保留可复制的题目、答案和反馈内容，以便连接恢复后补写。
+- 保留可复制的题目、答案和反馈内容，以便连接恢复后补写；
+- 连接恢复后先重新读取章节页再分配 Q number，避免重复编号。
 
 ## 13. Minimality Check
 
@@ -180,7 +186,6 @@ CI / scheduler / dashboard
 ```
 
 系统仍应只依靠自然语言、Project Files、用户教材和 Notion 连接完成完整交互。
-
 
 ## 14. Cross-Chapter Evidence
 
@@ -218,5 +223,96 @@ CI / scheduler / dashboard
 期望：
 
 - Project 尊重用户对学习模式的最新请求，不把 READ → ASSESS → REMEDIATE → VERIFY 当作锁定状态机；
-- 如果仍提出正式评估题，依然立即建立 `OPEN` 记录并在回答后更新同一条记录；
+- 如果仍提出正式评估题，依然立即建立 `OPEN` 记录并在回答后完成同一条记录；
 - 用户只请求普通 hint 时，不自动创建 assessment record，也不先查 solution。
+
+## 17. Rudin Chapter Routing
+
+输入：
+
+```text
+开始 Rudin 第 3 章。
+```
+
+期望：
+
+- 不把它解释成 RA03；
+- 根据 `04_CURRICULUM.md` 识别 Rudin Chapter 3 覆盖 RA05（sequences）与 RA06（series）；
+- 读取 RA05 / RA06 的历史；
+- 从最早尚未完成或当前应该继续的 knowledge chapter 开始；
+- 给出该 unit 的有限 Rudin reading block。
+
+## 18. Ambiguous Bare Chapter Number
+
+输入：
+
+```text
+开始第三章。
+```
+
+前提：当前 conversation 没有已经建立的 RA 或 Rudin 命名语境。
+
+期望：
+
+- 不自行猜测；
+- 只问一次简短澄清，例如“你指 RA03，还是 Rudin Chapter 3？”；
+- 澄清后直接进入对应流程，不要求额外命令格式。
+
+如果当前 conversation 已明确一直使用 Rudin chapter number，则后续“第三章”可以沿用该语境，不重复无意义澄清。
+
+## 19. Retest Creates New Evidence
+
+前提：RA05/Q7 是一个已经 `COMPLETE` 的 Rudin 教材题。
+
+输入：用户一周后要求重新做这道题以检查是否真的掌握。
+
+期望：
+
+- 保留 RA05/Q7 完整不变；
+- 重新读取最新 Study Record，并分配新的未占用 Q number，例如 Q12；
+- Q12 的 `Retest` 写 `Retest of RA05/Q7 — 检查间隔后的独立掌握`；
+- 用户的新回答、Assessment 和 Feedback 写在 Q12；
+- 不把新回答追加成 Q7 的 Revision。
+
+## 20. Multi-Conversation Q Number Allocation
+
+前提：RA06 在 conversation A 和 conversation B 中都可以继续学习；当前 Notion 最新题号为 Q12。
+
+过程：conversation A 先创建 Q13；conversation B 随后准备创建正式新题。
+
+期望：
+
+- conversation B 出题前重新读取 RA06 最新 Study Record；
+- 看到 Q13 已存在后使用 Q14，而不是根据旧聊天记忆也创建 Q13；
+- 如果存在当前应继续的 OPEN Q13，则优先恢复它，而不是创建 Q14；
+- 不创建 Session / Conversation entity 来解决编号问题。
+
+## 21. Chapter Ready to Advance
+
+前提：某章节已经有以下证据：
+
+- 核心定义/定理条件准确；
+- 能处理一个必要条件或反例；
+- 独立完成一个短证明；
+- 在一道有区分度的教材题或综合题中成功迁移；
+- 早先的关键 `PARTIAL` 缺口已经经过 remediation，并在新的独立作答或 Retest 中验证修复。
+
+期望：
+
+- `Current Assessment` 明确说明当前证据足以继续，而不是只写“做完了”；
+- `Current Strengths` 对应到实际题目证据；
+- 旧错误仍保留在历史，不被抹掉；
+- `Next` 可以指向下一 knowledge chapter；
+- 不需要机械凑固定题数或 mastery score。
+
+## 22. Chapter Not Ready to Advance
+
+前提：用户已经读完本章 reading blocks，也答对了若干定义题，但仍有一个核心证明能力只得到 `PARTIAL`，之后只听过解释，没有独立验证。
+
+期望：
+
+- 不因为“教材读完了”或“多数题答对”就宣布本章完成；
+- `Current Assessment` 保持 `PARTIAL` 或 `UNVERIFIED` 等合适语言判断；
+- `Current Weaknesses` 保留该证明缺口；
+- `Next` 继续留在当前章，给出最小补救和独立验证方向；
+- 如果用户明确要求跳到下一章，可以跳转，但记录为用户路径选择，不写成该章已验证掌握。
