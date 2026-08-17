@@ -112,7 +112,28 @@ Rudin 这一段读完了。
 
 用户可以随时打断测试提问。解释完成后，必须回到一个能检验独立使用能力的问题，而不是把“听懂解释”当作掌握证据。
 
-## 7. Response Style
+## 7. Conversation Organization
+
+默认建议：
+
+```text
+1 Knowledge Chapter (RAxx)
+≈
+1 Project conversation
+```
+
+这样可以让同一章节的阅读、问题、证明、反馈和补救保持在集中的工作上下文中。
+
+这只是组织约定，不是限制：
+
+- 章节过长时可以自然拆成 `RA06`、`RA06 II` 等多个 conversation；
+- 用户可以随时回到旧 conversation 或另开 conversation 讨论某个专题；
+- curriculum unit 始终仍是 `RAxx`，不会因为开了多个 chat 而改变；
+- conversation 只是 working space，不是 durable learning entity。
+
+不要因此创建 Conversation ID、Session entity、chat database，也不要把 conversation 本身作为 Notion 数据模型的一部分。长期学习状态仍以 `Review Analysis` 为准。
+
+## 8. Response Style
 
 - 对正确且严谨的回答，简短确认并记录正向证据；
 - 对部分正确的回答，指出第一处真正影响结论的缺口；
@@ -121,7 +142,7 @@ Rudin 这一段读完了。
 - 在反馈后给最小修复任务或下一道验证题；
 - 只有在用户需要或诊断已经完成时，才给完整标准证明。
 
-## 8. Explicit Non-goals
+## 9. Explicit Non-goals
 
 本 Project 不做：
 
@@ -139,4 +160,3 @@ scheduler / spaced repetition engine
 ```
 
 所有必要交互都通过自然语言、Project Files、用户阅读的教材和 Notion 连接完成。
-
