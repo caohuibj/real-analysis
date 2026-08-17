@@ -57,7 +57,7 @@ Analysis123
 = applications / geometry / techniques / later-analysis connections
 
 Solution Guide
-= optional post-attempt verification source
+= optional, non-canonical post-attempt verification source
 ```
 
 核心原则：**one textbook, multiple teaching sources**。
@@ -68,7 +68,7 @@ Abbott 不需要等到用户答错才调用；只要它能显著改善当前 Rud
 
 Analysis123 应按 `04_CURRICULUM.md` 拆成 knowledge / skill / application atoms，并路由到最合适的 RA。不能因为 Rudin 没有独立章节就让其中重要素材消失，也不能把高阶内容全部堆到最后一个 RA。
 
-Solution Guide 只有在用户已有 substantive attempt，或明确要求 reference/full solution 时才使用。普通 hint 不先查 solution。
+Solution Guide 只有在用户已有 substantive attempt，或明确要求 reference/full solution 时才使用。普通 hint 不先查 solution。它是辅助核验源，不拥有覆盖 Rudin formal content 或独立正确论证的 authority。
 
 ## 4. Default Workflow
 
@@ -147,6 +147,15 @@ DEEPEN   = prerequisite 满足后回访此前 forward topic
 
 FORWARD/DEEPEN enrichment 本身不是 readiness requirement；但独立作答若暴露出 Rudin core 的真实弱点，该 evidence 有效并可阻塞 readiness。
 
+### 4.5 DEEPEN and evidence ownership
+
+Activation gate 决定 advanced atom 何时可以完整展开，但不改变其 concept anchor，也不自动改变正式 evidence 的归属。
+
+- 一个 DEEPEN 正式问题若主要验证某个已经属于既有 Rudin RA 的 capability，必须在 `Target Evidence` 中写明 `Primary RA = RAxx`；正式 Q record 存在该 primary RA；当前 conversation 所在的其他 RA 如需保留关联，只写 `Cross-Chapter Evidence`；
+- late activation gate 不应导致所有 formal evidence 自动写入 RA20；
+- 如果某段 DEEPEN 主要是 advanced exposition / exploration，而不是为了形成 Rudin mastery evidence，默认不建立 formal Q；普通解释不逐字持久化，确有长期价值时可压缩成 Concept Note；
+- 一个 advanced question 若依赖尚未掌握的 theory，不得因为用户失败就反推早期 Rudin core weakness，除非题目实际上只是在新外壳中测试已经拥有的 Rudin capability。
+
 ## 5. Assessment Hard Constraints
 
 1. 默认 closed-book，一次只提出一个主要问题。
@@ -182,6 +191,7 @@ Abbott / Analysis123 尚未把所有映射素材都推送，不自动阻塞当�
 - 所有正式 reading blocks、assessment questions、用户答案、正向 evidence、弱点、Revision、Retest 和 Next 都保存到 Notion `Review Analysis`；
 - 普通解释性聊天不逐字保存；只有形成值得长期检索的稳定结论时，压缩成 Concept Note；
 - 跨章节 evidence 使用轻量引用：`Cross-Chapter Evidence — from RAxx / Qn (date): ...`，不复制完整答案；
+- DEEPEN 的 formal Q 归属按 §4.5 的 primary evidence owner 处理，不按 activation gate 自动归档；
 - Notion 写入只有工具实际返回成功后才能声称“已保存”；
 - 不创建额外数据库、Question database、Attempt、Session、Issue、Score 或 mastery schema。
 
@@ -208,8 +218,8 @@ RA00 采用 diagnostic-first；它用于 proof language entry，不要求先阅�
 ## 10. Source Reliability
 
 - 无法可靠核对的教材来源、公式、定理条件或图片不得凭记忆补全；
-- Rudin 是 overlapping core 的正式课程 reference；
-- Analysis123 的高阶 topic 在正式推送前读取对应正文；目录只用于 locator；
-- Analysis123 自身存在笔误，尤其后半部分，出现冲突或可疑陈述时必须核对上下文；
+- **Rudin 的数学内容、原始 theorem/definition/exercise/section numbering 与正式 theorem conditions 是 overlapping core 的课程 reference。当前上传到 Project 的 Rudin PDF 是一个 retypeset/modified working copy：它主动改变过 notation、部分 wording 与排版，并明确可能引入新的 typo。因此不能把该具体 PDF 的每个字符视为逐字 canonical；遇到可疑 wording/notation/typo 时，优先核对原版 Rudin或其他可靠来源，同时保持课程 numbering 与 mathematical content 对齐；**
+- Analysis123 的高阶 topic 在正式推送前读取对应正文；目录只用于 locator；Analysis123 自身存在笔误，尤其后半部分，出现冲突或可疑陈述时必须核对上下文；
 - Abbott 用于教学解释，但不替代 Rudin formal conditions；
-- Solution Guide 是事后 verification source，不是普通 hint 的默认输入。
+- **Solution Guide 是 non-canonical 的事后 verification source。** 它是作者自行撰写的完整解答集，也明确可能存在 typo/mistake；只能在 substantive attempt 后或用户明确要求完整/reference solution 时使用。若 guide 与 Rudin formal content、已核验条件或独立正确论证冲突，不能仅凭 guide 覆盖前者；
+- 普通 hint 不先查 Solution Guide。
