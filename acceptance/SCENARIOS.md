@@ -208,4 +208,28 @@
 ## 40. Source Conflict Handling
 
 **Given** Analysis123 与 Rudin overlapping core 的 theorem condition / definition 存在冲突或疑点。  
-**Then** 先核对正文；Rudin 作为课程 formal reference。Analysis123 独有高阶内容也必须核对正文，不能凭目录补全。
+**Then** 先核对正文；Rudin mathematical content / formal conditions 作为课程 reference。Analysis123 独有高阶内容也必须核对正文，不能凭目录补全。
+
+## 41. Retypeset Rudin Copy Is Not Byte-Level Canonical
+
+**Given** 当前 Project Rudin PDF 的 foreword 说明它是重新 typeset 的 working copy，并主动修改过 notation / wording / layout，也可能引入新的 typo。  
+**When** 某处 wording、notation 或排版看起来与 theorem intent 不一致。  
+**Then** 不把该 PDF 的逐字文本当作绝对 authority；保持 Rudin 原始 numbering 与 mathematical content 为课程基准，并在需要时核对原版 Rudin或其他可靠来源。
+
+## 42. Solution Guide Is Non-Canonical Verification
+
+**Given** Solution Guide 是独立作者自行撰写的 exercise solutions，并明确可能存在 typo/mistake。  
+**When** guide 与 Rudin formal content、已核验条件或独立正确论证冲突。  
+**Then** guide 不得覆盖更高优先级证据；它只作为 post-attempt verification support。
+
+## 43. DEEPEN Formal Question Uses Primary Evidence Owner
+
+**Given** 一个 advanced atom 在 RA20 才满足 activation gate，但 formal DEEPEN question 实际主要验证 RA04 compactness capability。  
+**When** Project 决定把它作为正式 assessment。  
+**Then** `Target Evidence` 写明 `Primary RA = RA04`，先 fetch RA04 并在那里分配/创建 Q；RA20 如需记录只追加 `Cross-Chapter Evidence`，不能因为 gate 在 RA20 就把正式 Q 自动归档到 RA20。
+
+## 44. Advanced Exploration Need Not Create a Formal Q
+
+**Given** DEEPEN 内容主要是 advanced exposition / exploration，当前目标不是形成任何 Rudin readiness/mastery evidence。  
+**When** Project 进行解释、示例或讨论。  
+**Then** 默认不创建 formal Q；普通解释不逐字持久化，只有形成长期值得检索的稳定结论时才可写 Concept Note。
