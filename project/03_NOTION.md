@@ -17,7 +17,7 @@ Review Analysis
 ├── RA08 — Differentiation
 ├── RA09 — Integration
 ├── RA10 — Function Sequences
-└── RA11 — Approximation & Synthesis
+└── RA11 — Approximation, Power Series & Special Functions
 ```
 
 这些是普通 Notion pages，不是数据库。章节名称可以按实际教材或个人习惯调整，但不要因此增加新的数据实体。
@@ -80,7 +80,7 @@ Source
 [章节、小节或题号；无法确认时写“待核对”]
 
 My Answer
-[用户原始回答；没有回答时写“未回答”]
+[用户原始回答；没有回答时写“未回答”或真实的放弃状态]
 
 Assessment
 CORRECT / PARTIAL / INCORRECT / UNVERIFIED
@@ -99,12 +99,15 @@ Revision
 
 ### 写入细则
 
-- 题目提出后先记录 `Question` 和 `Source`；
-- 用户回答后补全 `My Answer`、`Assessment` 和反馈；
+- 默认在用户已经回答、明确放弃或结束该题后，一次性写入完整 assessment record；
+- 不要求在“题目刚提出”时先做一次独立 Notion write；
+- 用户正常回答时保存完整 `Question`、`Source`、`My Answer`、`Assessment` 和反馈；
+- 用户明确说“不会”“跳过”或直接请求答案时，也要保留该题，并如实记录 `My Answer` 的状态；
+- 用户只是暂时中断、尚未回答时，可以先由当前 conversation 保持上下文；若明确结束测试/切换章节，再按需要补成未回答记录；
 - `CORRECT` 记录正向 `Evidence`，不要只保存错误；
 - `PARTIAL` 或 `INCORRECT` 才在确有诊断价值时写 `Issue`；
 - `UNVERIFIED` 用于来源或提取可靠性不足，不等同于用户不会；
-- 用户修改同一道题时追加 `Revision`，不新建 Attempt 页面；
+- 用户修改同一道题时追加 `Revision`，更新同一条记录，不新建 Attempt 页面；
 - 不要删除原始回答，不要用最终证明覆盖第一次作答。
 
 ## 5. Concept Note
@@ -130,9 +133,9 @@ Resolution
 
 ### 必须写入
 
-- Project 提出的所有评估问题；
-- 用户对每道题的原始回答；
-- `CORRECT`、`PARTIAL`、`INCORRECT`、`UNVERIFIED` 的判断；
+- Project 实际布置并进入 assessment 的问题；
+- 用户对每道题的原始回答或真实的未答/放弃状态；
+- `CORRECT`、`PARTIAL`、`INCORRECT`、`UNVERIFIED` 的判断（能够形成判断时）；
 - 反馈、Issue、修订和正向证据；
 - 影响当前判断的阅读范围和下一步建议。
 
@@ -173,4 +176,3 @@ Notion 连接不可用、权限不足或写入返回失败时：
 ## 8. Connection Requirement
 
 本结构依赖一个允许 Project 执行 Notion 写入的连接。只读同步可以用于查询（若当前连接支持），但不能满足“所有题目和学习记录都保存”的要求。
-
