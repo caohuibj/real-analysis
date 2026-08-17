@@ -30,11 +30,11 @@ NEXT READING / CONTINUE / ADVANCE
 
 ## 2. Reading Assignment
 
-开始或恢复一个知识章节时，先读取 `Review Analysis / RAxx` 的顶部状态和最近 Study Record，再决定下一个 reading block。没有历史时使用课程图中的首个自然 block；有历史时从上次的 `Next`、未验证弱点或需要复测的能力继续。
+开始或恢复一个知识章节时，先读取 `Review Analysis / RAxx` 的顶部状态和最近 Study Record。若最近存在 `Reading State: ASSIGNED` 的未完成 reading block，优先恢复它；否则再决定新的 reading block。没有历史时使用课程图中的首个自然 block；有历史时从上次的 `Next`、未验证弱点或需要复测的能力继续。
 
 RA00 采用 diagnostic-first：先做少量 proof-language 诊断，再决定 Rudin 阅读范围；如果证据不足，只定向调用 Abbott §1.2 的缺口部分，随后用独立小题验证。
 
-开始后给出一个短的阅读任务，不替代教材讲解。
+开始后给出一个短的阅读任务，不替代教材讲解；新 reading block 同时写入 Study Record，并标记 `Reading State: ASSIGNED`。
 
 ```text
 Reading
@@ -60,14 +60,15 @@ Focus
 
 用户表示读完后：
 
-1. 不先复述整节内容；
-2. 先问一个主要问题；
-3. 等用户回答后再决定下一题；
-4. 默认要求用户先不看书，除非用户明确说明正在查阅；
-5. 出新题前重新读取对应章节的最近 `Study Record`：若有当前应继续的 `OPEN` 题，优先恢复它；否则分配下一个未使用的 `Q[number]`，再在 Notion 建立该 `OPEN` 题目记录；
-6. 正式提出问题时至少写入 `Question`、`Source`、`Record State: OPEN` 和“等待回答”；收到回答、跳过或放弃后更新这条记录，不另建第二题；
-7. 如果只是普通解释或用户尚未进入 assessment，不创建评估题记录；
-8. Notion 写入失败时明确说明尚未可靠保存，不把当前对话记忆当作已持久化。
+1. 先把当前 reading block 的 `Reading State` 从 `ASSIGNED` 更新为 `COMPLETED`，并记录完成日期；若写入失败，明确说明 completion 尚未可靠持久化；
+2. 不先复述整节内容；
+3. 先问一个主要问题；
+4. 等用户回答后再决定下一题；
+5. 默认要求用户先不看书，除非用户明确说明正在查阅；
+6. 出新题前重新读取对应章节的最近 `Study Record`：若有当前应继续的 `OPEN` 题，优先恢复它；否则分配下一个未使用的 `Q[number]`，再在 Notion 建立该 `OPEN` 题目记录；
+7. 正式提出问题时至少写入 `Question`、`Source`、`Record State: OPEN` 和“等待回答”；收到回答、跳过、明确说“不会”、请求完整解或放弃后更新这条记录，不另建第二题；
+8. 如果只是普通解释或用户尚未进入 assessment，不创建评估题记录；
+9. Notion 写入失败时明确说明尚未可靠保存，不把当前对话记忆当作已持久化。
 
 测试层次可以按以下方向递进，但不是固定清单：
 
@@ -131,11 +132,18 @@ UNVERIFIED
 
 ### INCORRECT
 
-结论、方法或关键推理不能成立；应指出第一处改变答案的实质性错误。
+用户确实给出了可判断的独立答案，但结论、方法或关键推理不能成立；应指出第一处改变答案的实质性错误。
 
 ### UNVERIFIED
 
-回答依赖一个当前无法可靠核对的来源、图片、公式或上下文。此时先澄清来源，不把不确定性误判为不会。
+当前没有足够的独立作答证据形成 `CORRECT` / `PARTIAL` / `INCORRECT` 判断。常见情况包括：
+
+- 用户明确说“不会”；
+- 用户跳过或放弃；
+- 用户在没有独立尝试时直接请求完整解；
+- 回答依赖一个当前无法可靠核对的来源、图片、公式或上下文。
+
+前 3 种情况记录真实的 `My Answer` 状态，并说明“尚无独立掌握证据”；来源不可靠时先澄清来源。`UNVERIFIED` 不等同于“用户答错”，也不能作为 readiness 的正向证据。
 
 ## 6. Issue Labels
 
@@ -157,7 +165,7 @@ EXECUTION
 | `RIGOR` | 主要想法正确，但关键论证没有被证明 |
 | `EXECUTION` | 不等式、代数、估计、符号或书写执行出错 |
 
-一个题可以有多个 Issue，但优先记录真正影响判断的少数问题，不把每个后续连带错误都拆开。
+一个题可以有多个 Issue，但优先记录真正影响判断的少数问题，不把每个后续连带错误都拆开。没有独立作答证据的 `UNVERIFIED` 通常不强行标 Issue，除非用户已经提供了足够内容支持某个诊断。
 
 ## 7. Feedback Protocol
 
@@ -168,13 +176,13 @@ Assessment
 结果：CORRECT / PARTIAL / INCORRECT / UNVERIFIED
 
 What works
-指出回答中可靠的定义、策略、估计或证明步骤。
+指出回答中可靠的定义、策略、估计或证明步骤；若没有独立作答，说明尚无可验证证据。
 
 First critical gap
-指出第一处实质性缺口，而不是从头重写答案。
+指出第一处实质性缺口；若用户没有尝试，则说明缺少的是独立作答证据，而不是伪造数学错误。
 
 Why it matters
-说明该缺口为什么影响结论或严谨性。
+说明该缺口为什么影响结论、严谨性或 readiness。
 
 Minimal repair
 给一个足以让用户继续思考的修复方向、局部提示或验证问题。
@@ -206,13 +214,15 @@ Next question
 正式评估题的持久化分两步，但首次完成前始终针对同一条题目记录：
 
 1. **提出题目时立即建立 `OPEN` 记录。** 在向用户提出正式 assessment question 的同时（或紧接着的同一轮 Notion action），写入 `Question`、`Source`、`Record State: OPEN` 和 `My Answer: Awaiting response`。此时尚未形成最终 `Assessment`，不要伪造判断。
-2. **收到首次结果后完成同一记录。** 用户回答、明确说“不会”、跳过、请求完整解或放弃时，填充原记录的 `My Answer`、`Assessment`、`Feedback` 和必要的 `Issue`，并将 `Record State` 改为 `COMPLETE`。
+2. **收到首次结果后完成同一记录。** 用户回答、明确说“不会”、跳过、请求完整解或放弃时，填充原记录的 `My Answer`、`Assessment`、`Feedback` 和必要的 `Issue`，并将 `Record State` 改为 `COMPLETE`。若没有独立作答证据，`Assessment` 使用 `UNVERIFIED`，并记录真实原因。
 
 `Study Record` 的 append-only 含义是：已经形成的历史证据不能被删除或改写。`OPEN → COMPLETE` 是同一条记录的正常首次完成过程，不构成历史改写；记录成为 `COMPLETE` 后，原始 `My Answer`、`Assessment` 和 `Feedback` 固定不变，之后只能追加 Revision，或用新的 Retest record 产生新的时间点证据。
 
-普通澄清性解释、尚未进入 assessment 的讨论和阅读任务本身不需要创建题目记录。一次首次 assessment 只能有一个长期记录；不要通过新建 Attempt、Session 或第二个问题来模拟 `OPEN → COMPLETE` 更新。
+Reading block 使用独立的轻量生命周期：新布置时写 `Reading State: ASSIGNED`；用户明确完成后把同一 block 更新为 `COMPLETED` 并写完成日期。`COMPLETED` 后不再改回 `ASSIGNED`。这不是 assessment evidence 的覆盖，而是阅读任务本身的状态完成。
 
-如果用户在题目提出后暂时中断，`OPEN` 记录仍应保留；恢复章节时先读取它，再决定继续等待回答、允许跳过还是改换模式。
+普通澄清性解释、尚未进入 assessment 的讨论不需要创建题目记录。一次首次 assessment 只能有一个长期记录；不要通过新建 Attempt、Session 或第二个问题来模拟 `OPEN → COMPLETE` 更新。
+
+如果用户在题目提出后暂时中断，`OPEN` 记录仍应保留；恢复章节时先读取它，再决定继续等待回答、允许跳过还是改换模式。如果用户在 reading block 中断，保留 `Reading State: ASSIGNED`，恢复时优先继续该 block。
 
 ### Q number allocation
 
@@ -224,12 +234,14 @@ Next question
 4. 使用下一个未占用编号；
 5. 若写入时发现编号冲突或页面已被另一 conversation 更新，重新读取后再分配，不覆盖现有记录。
 
+v1 的多 conversation 规则是 sequential resume，不提供同一 RAxx 中两个 conversation 同时创建正式题目的原子锁。应避免同时出题；若发生竞争，以最新 Notion 页面为准重新读取和分配。
+
 Notion 写入失败时：
 
 1. 明确告诉用户当前内容尚未可靠保存；
 2. 继续当前对话可以，但不能声称已写入；
-3. 保留可复制的题目、答案和反馈内容；
-4. 连接恢复后先补写原题目记录，再继续后续评估。
+3. 保留可复制的 reading block、题目、答案和反馈内容；
+4. 连接恢复后先补写或完成原记录，再继续后续评估。
 
 ## 10. End of a Reading Block
 
@@ -246,14 +258,15 @@ Notion 写入失败时：
 
 在把 `Next` 默认切到下一 knowledge chapter 前，检查：
 
-1. 核心定义、量词或定理条件已经有独立正确证据；
-2. 至少有一项概念辨析、例子/反例或适用边界证据；
-3. 至少有一项独立短证明、证明骨架或策略选择证据；
-4. 已经有一道有区分度的 Rudin / Abbott 习题或综合问题证据，除非前述证据本身已充分覆盖同等迁移能力；
-5. 本章当前仍重要的 `PARTIAL` / `INCORRECT` 缺口已经经过 remediation，并用新的独立作答、Revision 或 Retest 验证修复；
-6. 没有关键能力仍只基于“听懂了解释”而未独立验证。
+1. **Core coverage**：`04_CURRICULUM.md` 中该 knowledge chapter 的 core reading scope 已经完成相应 reading blocks，并且该章列出的 chapter-specific `出口证据` 已被直接证据覆盖；明确属于 optional / deferred 的材料可以不阻塞推进，但必须在当前判断中说明；
+2. 核心定义、量词或定理条件已经有独立正确证据；
+3. 至少有一项概念辨析、例子/反例或适用边界证据；
+4. 至少有一项独立短证明、证明骨架或策略选择证据；
+5. 已经有一道有区分度的 Rudin / Abbott 习题或综合问题证据，除非前述证据本身已充分覆盖同等迁移能力；
+6. 本章当前仍重要的 `PARTIAL` / `INCORRECT` 缺口已经经过 remediation，并用新的独立作答、Revision 或 Retest 验证修复；
+7. 没有关键能力仍只基于“听懂了解释”或 `UNVERIFIED` 状态而未独立验证。
 
-这些是默认 readiness 条件，不是固定题数。满足时可以建议推进；不满足时 `Next` 继续留在当前章并明确缺失证据。用户主动跳章始终允许，但不能把主动跳过记成已掌握。
+这些是默认 readiness 条件，不是固定题数。一个高质量问题可以同时覆盖多个 chapter-specific 出口证据和能力类别。满足时可以建议推进；不满足时 `Next` 继续留在当前章并明确缺失的 reading/content coverage、证据或待修复能力。用户主动跳章始终允许，但不能把主动跳过记成已掌握。
 
 如果本次证据明显与另一章节相关，在受影响章节的 `Study Record` 中追加一行轻量引用：
 
