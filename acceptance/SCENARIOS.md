@@ -121,7 +121,8 @@
 - 保留第一次 `My Answer`、原始 `Assessment` 和原始 `Feedback`；
 - 追加 `Revision`、`Revision Assessment` 和 `Revision Feedback` 并重新判断；
 - 不创建 Attempt、Session 或第二个问题页面；
-- 不把这次同轮修订错误标记成 Retest。
+- 不把这次同轮修订错误标记成 Retest；
+- Revision 只能证明当前题目的 local repair；若这个缺口是阻塞 chapter readiness 的重要核心弱点，Revision 即使改为 `CORRECT` 也不能单独作为 independent verification。
 
 ## 9. Ordinary Explanation
 
@@ -148,8 +149,8 @@
 
 期望：
 
-- 先读取 `Review Analysis / RA05`；
-- 综合 `Current Strengths`、`Current Weaknesses`、reading states、原 assessment、Revision / Retest 和最近题目证据；
+- 先定位并 fetch `Review Analysis / RA05` 的完整章节页；如果通过 Notion search 找到页面，search 结果只用于定位，不能直接使用 highlight / snippet 作为当前状态；
+- 综合最新 fetch 中的 `Current Strengths`、`Current Weaknesses`、reading states、原 assessment、Revision / Retest 和最近题目证据；
 - 不只依赖当前聊天记忆；
 - 查询本身不创建新题目或新记录。
 
@@ -304,7 +305,7 @@ CI / scheduler / dashboard
 - 能处理一个必要条件或反例；
 - 独立完成一个短证明；
 - 在一道有区分度的教材题或综合题中成功迁移；
-- 早先的关键 `PARTIAL` 缺口已经经过 remediation，并在新的独立作答或 Retest 中验证修复；
+- 早先的关键 `PARTIAL` 缺口已经经过 remediation，并在新的独立作答或 Retest 中验证修复；Revision 可以保留为 local repair evidence，但不能代替这一步；
 - 没有关键能力只停留在 explanation-only 或 `UNVERIFIED`。
 
 期望：
@@ -322,12 +323,15 @@ CI / scheduler / dashboard
 
 前提 B：用户已经读完全部 core reading blocks，也答对了若干定义题，但仍有一个核心证明能力只得到 `PARTIAL`，之后只听过解释，没有独立验证。
 
+前提 C：同一个核心证明能力先得到 `PARTIAL`，用户根据当前反馈完成了 `CORRECT` Revision，但还没有新的独立题、Retest 或其他无当前提示的验证。
+
 期望：
 
 - A 中不得因为“已测部分表现很好”就宣布整章 ready；`Next` 应继续到本章尚未覆盖的 core reading block；
 - B 中不得因为“教材读完了”或“多数题答对”就宣布本章完成；
+- C 中 Revision 可以记录为原题已修复，但该重要核心弱点仍是 readiness blocker，直到出现 independent verification；
 - `Current Assessment` 保持 `PARTIAL` 或 `UNVERIFIED` 等合适语言判断；
-- `Current Weaknesses` 或 `Next` 明确区分缺失的是 content coverage、独立证据还是待修复能力；
+- `Current Weaknesses` 或 `Next` 明确区分缺失的是 content coverage、local repair、独立验证还是其他待修复能力；
 - 如果用户明确要求跳到下一章，可以跳转，但记录为用户路径选择，不写成该章已验证掌握。
 
 ## 23. No Independent Attempt
@@ -368,17 +372,36 @@ CI / scheduler / dashboard
 6. Project 创建 Q1（或下一个可用 Q）为 `OPEN`；
 7. 用户回答，Q record 原地变为 `COMPLETE`；
 8. 后续自适应 assessment 至少出现一次需要 remediation 的 `PARTIAL` 或等价缺口；
-9. 用户根据反馈修复，并通过 Revision / 新独立题 / Retest 完成 verification；
+9. 用户根据反馈通过 Revision 修复原题；如果该缺口是阻塞 readiness 的重要核心弱点，Revision 只算 local repair，随后还必须用新的独立题、Retest 或其他 genuinely unscaffolded answer 完成 independent verification；
 10. 继续完成该 knowledge chapter 的全部 core reading scope 和 chapter-specific 出口证据；
 11. readiness contract 的 core coverage、statement、boundary、proof、transfer、gap closure、independent verification 全部满足；
 12. `Current Assessment / Strengths / Weaknesses / Next` 被正确更新；
-13. 新开一个 Project conversation，再次输入该章节或继续学习请求。
+13. 新开一个 Project conversation，再次输入该章节或继续学习请求；如果需要用 Notion search 找页面，必须 search 定位后 fetch exact chapter page，再决定恢复状态。
 
 最终期望：
 
 - 新 conversation 不依赖旧 chat memory，而是通过 `Review Analysis` 正确恢复；
+- 若 Notion search 的 highlight / snippet 与页面当前状态不一致，以最新 page fetch 为准；
 - 已 `COMPLETED` 的 reading blocks 不被重复布置；
 - 已 `COMPLETE` 的题目不被改写；
 - 没有未处理的 `OPEN` 题或 `ASSIGNED` block 时，Project 按 `Next` 进入正确的后续内容或下一 knowledge chapter；
 - 如果任一 core coverage 或 mastery evidence 条件仍缺失，则不能提前 advance；
 - 整个流程不需要后端、数据库、Session entity 或人工复制历史。
+
+## 25. Notion Search Is Locator-Only
+
+前提：`Review Analysis / RAxx` 已存在，并且页面顶部状态近期发生过更新。
+
+过程：
+
+1. 在新的查询或 conversation 中先用 Notion search 查找该章节页；
+2. 记录 search 返回的 page ID / URL 和 highlight；
+3. 随后对 exact page ID / URL 执行完整 fetch；
+4. 根据 fetch 内容决定 `Current Assessment`、`Next`、`Reading State`、`OPEN` 题和下一个 Q number。
+
+期望：
+
+- search 只承担 locator 作用；
+- 即使 search highlight / snippet 是旧状态，也不据此恢复或推进；
+- 最新完整 fetch 是 durable state 的读取依据；
+- 纯定位和读取不创建新 Study Record。
