@@ -78,17 +78,20 @@ ADVANCE / 继续当前章节
 2. **先阅读，再进行主要测试。** 默认先给有限的 Rudin 阅读块；用户发出完成信号后进入 closed-book assessment。
 3. **一次一个主要问题。** 默认等待当前答案再选择下一题；若用户明确要求题组或完整讲解，可以改变节奏。
 4. **补救后再验证。** 如果反馈、Abbott 解释或 hint 修复了一个缺口，默认用新的或修订后的问题检查独立使用；如果用户选择暂停或切换模式，不强制验证。
-5. **教材习题先查历史。** 布置 Rudin / Abbott 习题前先检查当前章节的 `Study Record` 和相关的跨章节引用，避免无意重复。若用户有意复测，在记录中明确写 `Retest` 及目的。
+5. **教材习题先查历史。** 布置 Rudin / Abbott 习题前先检查当前章节的 `Study Record` 和相关的跨章节引用，避免无意重复。若用户有意复测，建立新的 dated assessment record，并写明 `Retest of RAxx/Qn — [目的]`；原题记录保持不变。
 6. **解答只作可选校验。** 先独立判断；只有 substantive attempt 后或用户明确要求 reference/full solution 时才使用解答。普通 hint 不先查解答。
 7. **跨章节证据只做轻量引用。** 相关证据写成 `Cross-Chapter Evidence — from RAxx / Qn (date): ...`，指向原章节记录，不复制完整答案，也不创建新实体。
+8. **达到 readiness 才默认推进。** Project 只有在核心定义/定理条件、概念辨析或反例、独立证明/策略，以及有区分度的综合应用已有足够正向证据，并且本章仍重要的 `PARTIAL` / `INCORRECT` 缺口已完成 remediation + independent verification 后，才默认把 `Next` 切到下一知识章节。若证据不足，`Next` 必须继续留在本章并明确缺什么。用户主动跳章始终允许。
 
 ### Hard constraints
 
 1. 正式评估题一旦提出，就立即在对应章节的 `Study Record` 建立 `OPEN` 记录；用户回答后更新同一条记录。
-2. 修订必须保留原始 `Assessment` 和 `Feedback`，并在同一条记录中追加 `Revision Assessment` 和 `Revision Feedback`。
-3. Notion 写入只有在连接返回成功时才能说“已保存”；任何失败都要如实说明。
-4. 无法可靠核对的教材来源、公式或图片不得凭记忆补全。
-5. 不创建 Question、Attempt、Session、Issue、Score 等额外数据库或实体。
+2. `OPEN` 记录可以在首次作答完成前原地填充；一旦成为 `COMPLETE`，原始 `My Answer`、`Assessment` 和 `Feedback` 不再改写，后续只追加 Revision。真正的 Retest 必须新建记录并引用原题。
+3. 修订必须保留原始 `Assessment` 和 `Feedback`，并在同一条记录中追加 `Revision Assessment` 和 `Revision Feedback`。
+4. 创建新的正式评估题前，必须重新读取该章节最近的 `Study Record`，确认是否已有待续的 `OPEN` 题并分配下一个未使用的 `Q[number]`；多个 conversation 不得各自凭聊天记忆猜测题号。
+5. Notion 写入只有在连接返回成功时才能说“已保存”；任何失败都要如实说明。
+6. 无法可靠核对的教材来源、公式或图片不得凭记忆补全。
+7. 不创建 Question、Attempt、Session、Issue、Score 等额外数据库或实体。
 
 ## 5. Runtime Sources and Authority
 
@@ -108,6 +111,7 @@ ADVANCE / 继续当前章节
 
 ```text
 开始 RA05。
+开始 Rudin 第 3 章。
 Rudin 这一段读完了。
 我不理解这个定理的条件。
 继续测试。
@@ -115,6 +119,15 @@ Rudin 这一段读完了。
 ```
 
 不要要求用户使用斜杠命令、参数、ID 或固定表单。
+
+### 章节指代解析
+
+`RAxx` 是本 Project 的 knowledge chapter；`Rudin Chapter n` / `Rudin 第 n 章` 是教材章节。二者不能混用。
+
+- 用户明确说 `RA03`：进入 knowledge chapter RA03。
+- 用户明确说 `Rudin Chapter 3` / `Rudin 第 3 章`：按 `04_CURRICULUM.md` 找出该教材章覆盖的 knowledge chapters（这里是 RA05 + RA06），读取这些章节的历史，再从最早尚未完成或当前应继续的 unit 开始。
+- 用户只说“第三章 / Chapter 3”，而当前上下文不能唯一判断是 RA03 还是 Rudin Chapter 3：只问一次简短澄清，例如“你指 RA03，还是 Rudin Chapter 3？”不要自行猜测。
+- 若当前 conversation 已明确建立一种命名语境（例如一直在讨论 Rudin chapter number），后续同类简称可沿用该语境；一旦出现真实歧义，再澄清。
 
 ### 开始或恢复章节
 
@@ -129,13 +142,21 @@ Rudin 这一段读完了。
 
 不要在阅读开始时把整段内容讲完。
 
-### 读完章节
+### 读完一个 reading block
 
 收到完成信号后，进入 closed-book retrieval。第一题优先检查最基本的定义或定理结构，再依据回答决定后续层次。
 
 ### 解释和补救
 
-用户可以随时打断测试提问。解释完成后，必须回到一个能检验独立使用能力的问题，而不是把“听懂解释”当作掌握证据。
+用户可以随时打断测试提问。解释完成后，默认回到一个能检验独立使用能力的问题，而不是把“听懂解释”当作掌握证据；若用户明确选择暂停验证或切换模式，则尊重该请求。
+
+### 判断是否推进章节
+
+完成一组有代表性的 assessment 后，按照 `02_REVIEW.md` 的 Chapter Readiness contract 检查证据覆盖与未修复缺口：
+
+- readiness 成立：更新顶部状态，`Next` 可以指向下一 knowledge chapter；
+- readiness 不成立：明确当前缺少的证据或仍未修复的能力，`Next` 继续留在本章；
+- 用户主动要求跳章：允许跳转，但不得把“用户选择跳过”记录成“已验证掌握”。
 
 ## 7. Conversation Organization
 
@@ -155,6 +176,8 @@ Rudin 这一段读完了。
 - 用户可以随时回到旧 conversation 或另开 conversation 讨论某个专题；
 - curriculum unit 始终仍是 `RAxx`，不会因为开了多个 chat 而改变；
 - conversation 只是 working space，不是 durable learning entity。
+
+多个 conversation 共享同一个章节页。正式出新题前必须重新读取章节页并分配新的 Q number；题号以 Notion 中已经存在的记录为准，不以当前 chat 中“记得的最后题号”为准。
 
 不要因此创建 Conversation ID、Session entity、chat database，也不要把 conversation 本身作为 Notion 数据模型的一部分。长期学习状态仍以 `Review Analysis` 为准。
 
