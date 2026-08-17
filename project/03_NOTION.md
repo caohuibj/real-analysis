@@ -140,22 +140,30 @@ Revision Feedback
 - `UNVERIFIED` 也用于来源或提取可靠性不足；无论是哪种原因，都不能算 readiness 的正向证据；
 - 解答是可选校验源：substantive attempt 后或用户明确要求 reference/full solution 后才查阅；普通 hint 不先查解答；解答不可用时不阻塞流程；
 - 用户在同一轮反馈后修改同一道题时，在这个 `COMPLETE` 记录下追加 `Revision`、`Revision Assessment`、`Revision Feedback`，不改写原始字段；
+- Revision 证明的是当前题目在反馈后的局部修复，不自动构成 independent verification；如果该缺口是阻塞 chapter readiness 的重要核心弱点，必须再由新的独立题、Retest 或其他不依赖当前提示的作答提供独立验证；
 - 之后重新独立做同一道教材题属于 Retest：创建新的 Q record，并在 `Retest` 写 `Retest of RAxx/Qm — [目的]`，不要把新时间点证据塞进旧题 Revision；
 - 不要删除原始回答、原始判断或原始反馈，不要用最终证明覆盖第一次作答。
 
-### Revision 与 Retest 的边界
+### Revision、Retest 与 independent verification 的边界
 
 ```text
 Revision
 = 同一轮 assessment 中，用户根据当前反馈继续修同一道题
 = 追加在原 Q record
+= local repair evidence
+= 不单独关闭一个阻塞 readiness 的重要核心弱点
 
 Retest
 = 之后的新时间点重新独立接受同题或等价题验证
 = 新建新的 Q record，并引用原 Q
+= 可以作为 independent verification
+
+New independent question / genuinely unscaffolded answer
+= 不依赖当前反馈提示，在新问题或新情境中独立使用同一能力
+= 可以作为 independent verification
 ```
 
-这样既保留学习轨迹，又不需要 Attempt / Session entity。
+这样既保留学习轨迹，又不需要 Attempt / Session entity，同时不会把“根据刚收到的提示改对原题”误判成独立掌握。
 
 ## 5. Cross-Chapter Evidence
 
@@ -218,37 +226,41 @@ Notion 连接不可用、权限不足或写入返回失败时：
 
 ## 8. Retrieval Rules
 
+Notion search 与 page fetch 的职责必须分开：**search 是 locator-only，fetch 才是状态读取。** Search highlight / snippet 可能不是页面的最新完整状态，因此不能据此做 resume、readiness、OPEN 或 Q-number 判断。
+
 ```text
 进入或恢复章节
-→ 先读取对应章节页顶部、最近 Study Record、ASSIGNED reading block、OPEN 题目、Retest 记录和跨章节引用，再选择下一步
+→ 如果已知 exact page ID / URL，直接 fetch 章节页
+→ 如果未知，先 search 定位 `Review Analysis / RAxx`，然后 fetch exact chapter page
+→ 只使用最新 fetch 中的顶部状态、最近 Study Record、ASSIGNED reading block、OPEN 题目、Retest 记录和跨章节引用来选择下一步
 
 未完成 reading block
-→ 若最近 Reading State = ASSIGNED，优先恢复该 block；只有明确 COMPLETED 后才进入后续 assessment / next reading
+→ 若最新 fetch 中 Reading State = ASSIGNED，优先恢复该 block；只有明确 COMPLETED 后才进入后续 assessment / next reading
 
 创建正式新题
-→ 再次读取最新 Study Record，确认 OPEN 状态并分配下一个未使用 Q number
+→ 再次 fetch 最新章节页，确认 OPEN 状态并分配下一个未使用 Q number
 
 当前章节掌握情况
-→ 读取对应章节页顶部和最近 Study Record
+→ fetch 对应章节页顶部和最近 Study Record
 
 某一道题的历史
-→ 读取该题的完整记录和 Revision
+→ fetch 章节页并读取该题的完整记录和 Revision
 
 某项能力是否稳定
-→ 同时查看原 assessment、后续 Revision / Retest 和其他迁移题证据
+→ 同时查看原 assessment、后续 local Revision、Retest 和其他独立迁移题证据；Revision alone 不等于 independent verification
 
 长期薄弱点
-→ 汇总各章节的 Current Weaknesses，并回看相关题目证据
+→ 定位相关章节后 fetch 页面，汇总 Current Weaknesses，并回看相关题目证据
 
 已经掌握的内容
-→ 读取 Current Strengths 和 CORRECT 记录
+→ 以最新 fetch 的 Current Strengths 和 CORRECT / verified records 为准
 ```
 
 纯查询不创建新题目或新记录。
 
 ### Q number concurrency boundary
 
-多个 conversation 可以顺序恢复同一个 knowledge chapter，但 v1 不提供同一 RAxx 中两个 conversation 同时创建正式题目的原子锁。创建新题前必须重新读取最新页面；如果发现竞争更新或编号冲突，重新分配，不覆盖已有记录。不要为此引入 Session / Question database。
+多个 conversation 可以顺序恢复同一个 knowledge chapter，但 v1 不提供同一 RAxx 中两个 conversation 同时创建正式题目的原子锁。创建新题前必须 fetch 最新页面；如果发现竞争更新或编号冲突，重新分配，不覆盖已有记录。不要为此引入 Session / Question database。
 
 ## 9. Connection Requirement
 
