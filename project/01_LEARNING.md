@@ -103,6 +103,15 @@ FORWARD 的目标是建立 connection，不是提前开一门新课。
 
 如果 prerequisite 尚不足，只推最小可理解的 idea/example；不得要求完整 theorem proof。若以后 activation gate 满足，可 DEEPEN。
 
+### 3.4 DEEPEN evidence ownership
+
+DEEPEN 的 activation gate 只决定 advanced atom 何时可以完整展开，不决定正式 Q 应存在哪个 RA。
+
+- 如果 DEEPEN formal question 主要验证某个既有 Rudin capability，先确定 `Primary RA`，并在 `Target Evidence` 中明确写出；正式 Q 存在该 Primary RA；
+- 若当前 conversation 位于别的 RA，可在该页面追加 `Cross-Chapter Evidence`，但不复制完整 Q record；
+- 若只是 advanced exposition / exploration，不以 Rudin mastery evidence 为目标，默认不创建 formal Q；必要时只压缩成 Concept Note；
+- 不因为 activation gate 在 RA20，就把所有 late-gated questions 自动归到 RA20。
+
 ## 4. Assessment Design
 
 默认 closed-book，一次一个主要问题。
@@ -147,17 +156,20 @@ FORWARD 的目标是建立 connection，不是提前开一门新课。
 - 若题目实际测试的是尚未学习的 advanced theory，不得拿失败结果反推 Rudin core weakness；
 - 若题目只是在新外壳中使用已掌握 Rudin skill，则可作为 transfer evidence。
 
+如果是 cross-RA DEEPEN question，在真正成为 formal assessment 前先决定 Primary RA；如果无法明确它主要验证哪个已经拥有的 Rudin capability，则通常应保持 enrichment/exploration，而不是为了持久化而强行创建 formal Q。
+
 布置任何教材/讲义题前先检查 Study Record，避免无意重复。若有意复测，则创建新的 Retest record 并引用旧 Q。
 
 ## 6. Formal Question Lifecycle
 
 ### 6.1 Before asking a new question
 
-必须重新 fetch 最新章节页：
+必须重新 fetch 最新目标章节页：
 
-1. 若已有 `OPEN` Q，优先恢复；
-2. 否则使用下一个未占用 Q number；
-3. 不依赖聊天记忆猜题号。
+1. 普通题的目标页是当前 RA；cross-RA DEEPEN formal question 的目标页是其 Primary RA；
+2. 若目标页已有 `OPEN` Q，优先恢复；
+3. 否则使用下一个未占用 Q number；
+4. 不依赖聊天记忆猜题号。
 
 ### 6.2 OPEN
 
@@ -169,6 +181,8 @@ Source: [Rudin / Abbott / Analysis123 / self-authored / user-provided]
 Question: ...
 Target Evidence: ...
 ```
+
+cross-RA DEEPEN 时，`Target Evidence` 必须包含 `Primary RA = RAxx`。
 
 ### 6.3 First answer
 
@@ -281,11 +295,11 @@ Transfer/application 可以来自 Rudin、Abbott、Analysis123 或 self-authored
 
 ## 12. Source and Solution Reliability
 
-- Rudin 是 overlapping core 的 formal reference；
+- **Rudin 的 mathematical content、原始 numbering 与 formal theorem conditions 是 overlapping core 的课程 reference；当前 Project Rudin PDF 是 retypeset/modified working copy，不把其逐字 wording/notation 当作不可质疑的 authority；可疑处核对原版 Rudin或其他可靠来源；**
 - Abbott 用于教学解释，不替代 Rudin theorem conditions；
 - Analysis123 的目录只作 locator；正式使用高阶 theorem/题目前读取正文并核对 prerequisite；
 - Analysis123 存在笔误，出现可疑结论时不得凭目录或记忆补全；
-- Solution Guide 只在 substantive attempt 后或明确要求 reference/full solution 时使用；
+- **Solution Guide 是 non-canonical post-attempt verification support；** 只在 substantive attempt 后或明确要求 reference/full solution 时使用；若与 Rudin formal content、已核验条件或独立正确论证冲突，不以 guide 覆盖前者；
 - 普通 hint 不先查 solution。
 
 ## 13. Persistence Timing
