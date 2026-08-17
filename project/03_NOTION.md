@@ -44,7 +44,7 @@ Review Analysis
 ## Study Record
 ```
 
-Project 可以根据新证据改写顶部四个区块，但 `Study Record` 中的历史内容只能追加。
+Project 可以根据新证据改写顶部四个区块。`Study Record` 的历史证据遵守 append-only 语义：`OPEN` 记录在首次回答前允许原地完成；成为 `COMPLETE` 后，原始答案、判断和反馈不得改写，只能追加 Revision，或者用新的 Retest record 形成新的时间点证据。
 
 ## 3. Reading Block
 
@@ -95,13 +95,13 @@ Issue
 CONCEPT / STRATEGY / LOGIC / RIGOR / EXECUTION
 
 Retest
-No；如果是有意重复教材题，写 `Retest — [目的]`
+No；如果是后续有意复测，写 `Retest of RAxx/Qm — [目的]`
 
 Solution Reference
 Not consulted；或写“substantive attempt 后核对 / 用户明确要求 reference/full solution 后核对 / unavailable”
 
 Revision
-[后续修订；没有时删除该段或写“无”]
+[同一轮反馈后的后续修订；没有时删除该段或写“无”]
 
 Revision Assessment
 [对修订后的同一题重新判断]
@@ -114,16 +114,33 @@ Revision Feedback
 
 ### 写入细则
 
+- 创建正式新题前，先重新读取对应章节最新的 `Study Record`；若有当前应继续的 `OPEN` 题，优先恢复，不重复创建；
+- 若确需新题，找到已存在的最大 `Q[number]`，分配下一个未使用编号；若写入时发现页面已由另一 conversation 更新或编号冲突，重新读取后再分配；
 - 正式评估题一旦提出，立即写入同一条 `OPEN` 记录：`Question`、`Source`、`Record State: OPEN`、`My Answer: 等待回答`；
-- 用户回答、明确说“不会”、跳过、请求完整解或放弃后，更新这条记录的 `My Answer`、`Assessment`、`Feedback` 和必要的 `Issue`；
-- 题目提出时不要伪造最终判断；`Assessment` 可以暂留空，直到形成可靠诊断；
+- 用户首次回答、明确说“不会”、跳过、请求完整解或放弃后，填充这条记录的 `My Answer`、`Assessment`、`Feedback` 和必要的 `Issue`，并把 `Record State` 改为 `COMPLETE`；
+- `OPEN → COMPLETE` 是同一条记录正常的首次完成，不算覆盖历史；
+- 记录成为 `COMPLETE` 后，原始 `My Answer`、原始 `Assessment` 和原始 `Feedback` 固定不变；
 - `CORRECT` 记录正向证据，不要只保存错误；
 - `PARTIAL` 或 `INCORRECT` 才在确有诊断价值时写 `Issue`；
 - `UNVERIFIED` 用于来源或提取可靠性不足，不等同于用户不会；
-- 如果教材题在历史中已经出现，只有有意复测时才再次使用，并写 `Retest` 及目的；
 - 解答是可选校验源：substantive attempt 后或用户明确要求 reference/full solution 后才查阅；普通 hint 不先查解答；解答不可用时不阻塞流程；
-- 用户修改同一道题时追加 `Revision`、`Revision Assessment`、`Revision Feedback`，更新同一条记录，不新建 Attempt 页面；
+- 用户在同一轮反馈后修改同一道题时，在这个 `COMPLETE` 记录下追加 `Revision`、`Revision Assessment`、`Revision Feedback`，不改写原始字段；
+- 之后重新独立做同一道教材题属于 Retest：创建新的 Q record，并在 `Retest` 写 `Retest of RAxx/Qm — [目的]`，不要把新时间点证据塞进旧题 Revision；
 - 不要删除原始回答、原始判断或原始反馈，不要用最终证明覆盖第一次作答。
+
+### Revision 与 Retest 的边界
+
+```text
+Revision
+= 同一轮 assessment 中，用户根据当前反馈继续修同一道题
+= 追加在原 Q record
+
+Retest
+= 之后的新时间点重新独立接受同题或等价题验证
+= 新建新的 Q record，并引用原 Q
+```
+
+这样既保留学习轨迹，又不需要 Attempt / Session entity。
 
 ## 5. Cross-Chapter Evidence
 
@@ -135,6 +152,8 @@ Cross-Chapter Evidence — from RAxx / Q[number] (YYYY-MM-DD)
 ```
 
 只保存指向来源题目的轻量引用；完整题目、答案、原始判断、反馈和修订仍只保留在来源章节。不要创建跨章节数据库、复制整条题目记录或把引用当成新的 assessment。
+
+如果后来产生 Retest，新 Retest 有自己的 Q number；需要引用新的时间点证据时，引用新的 Q record，而不是悄悄改写旧引用。
 
 ## 6. Concept Note
 
@@ -162,7 +181,7 @@ Resolution
 - Project 实际布置并进入 assessment 的问题（题目提出时先写 `OPEN` 记录）；
 - 用户对每道题的原始回答或真实的未答/放弃状态；
 - `CORRECT`、`PARTIAL`、`INCORRECT`、`UNVERIFIED` 的原始判断（能够形成判断时）；
-- 反馈、Issue、修订和正向证据；
+- 反馈、Issue、Revision、Retest 和正向证据；
 - 影响当前判断的阅读范围和下一步建议。
 
 ### 不必逐字写入
@@ -179,7 +198,7 @@ Notion 连接不可用、权限不足或写入返回失败时：
 1. 不声称已经保存；
 2. 在当前回答中说明“本条尚未写入 Review Analysis”；
 3. 保留可复制的记录内容；
-4. 连接恢复后补写原始题目、答案、判断和反馈。
+4. 连接恢复后先重新读取章节页，再补写原始题目、答案、判断和反馈，避免产生重复 Q number。
 
 ## 8. Retrieval Rules
 
@@ -187,11 +206,17 @@ Notion 连接不可用、权限不足或写入返回失败时：
 进入或恢复章节
 → 先读取对应章节页顶部、最近 Study Record、OPEN 题目、Retest 记录和跨章节引用，再选择 reading block 或下一题
 
+创建正式新题
+→ 再次读取最新 Study Record，确认 OPEN 状态并分配下一个未使用 Q number
+
 当前章节掌握情况
 → 读取对应章节页顶部和最近 Study Record
 
 某一道题的历史
 → 读取该题的完整记录和 Revision
+
+某项能力是否稳定
+→ 同时查看原 assessment、后续 Revision / Retest 和其他迁移题证据
 
 长期薄弱点
 → 汇总各章节的 Current Weaknesses，并回看相关题目证据
