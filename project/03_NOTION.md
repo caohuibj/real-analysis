@@ -44,7 +44,7 @@ Review Analysis
 ## Study Record
 ```
 
-Project 可以根据新证据改写顶部四个区块。`Study Record` 的历史证据遵守 append-only 语义：`OPEN` 记录在首次回答前允许原地完成；成为 `COMPLETE` 后，原始答案、判断和反馈不得改写，只能追加 Revision，或者用新的 Retest record 形成新的时间点证据。
+Project 可以根据新证据改写顶部四个区块。`Study Record` 的历史证据遵守 append-only 语义：reading block 可以从 `ASSIGNED` 完成到 `COMPLETED`；题目 `OPEN` 记录在首次回答前允许原地完成；题目成为 `COMPLETE` 后，原始答案、判断和反馈不得改写，只能追加 Revision，或者用新的 Retest record 形成新的时间点证据。
 
 ## 3. Reading Block
 
@@ -63,7 +63,21 @@ Reading Focus:
 
 Deferred:
 - [暂时不要求的材料]
+
+Reading State:
+ASSIGNED
+
+Completed:
+—
 ```
+
+### Reading lifecycle
+
+- 新 reading block 一旦正式布置，立即写 `Reading State: ASSIGNED`；
+- 用户明确说“这一段读完了”或等价完成信号后，更新**同一个** reading block 为 `Reading State: COMPLETED`，并把 `Completed` 写为实际日期；
+- `COMPLETED` 后不再改回 `ASSIGNED`；如果之后有意重读，应创建新的 dated Reading Block；
+- `COMPLETED` 只表示用户确认完成阅读，不是 mastery evidence；后续 assessment 仍然必要；
+- 恢复章节时，如果最近存在 `ASSIGNED` reading block，优先恢复它，不创建重复 reading block，也不假设用户已经读完。
 
 ## 4. Assessment Record
 
@@ -83,16 +97,16 @@ Record State
 OPEN / COMPLETE
 
 My Answer
-[题目刚提出时写“等待回答”；之后写用户原始回答或真实的跳过、放弃、未回答状态]
+[题目刚提出时写“等待回答”；之后写用户原始回答或真实的不会、跳过、放弃、请求完整解等状态]
 
 Assessment
 [原始判断：CORRECT / PARTIAL / INCORRECT / UNVERIFIED；题目刚提出时暂留空]
 
 Feedback
-[原始判断的证据、做得好的地方、第一处关键缺口、为什么重要和最小修复]
+[原始判断的证据、做得好的地方、第一处关键缺口、为什么重要和最小修复；若没有独立作答，说明尚无可验证 mastery evidence]
 
 Issue
-CONCEPT / STRATEGY / LOGIC / RIGOR / EXECUTION
+CONCEPT / STRATEGY / LOGIC / RIGOR / EXECUTION；没有足够独立作答证据时通常留空
 
 Retest
 No；如果是后续有意复测，写 `Retest of RAxx/Qm — [目的]`
@@ -118,11 +132,12 @@ Revision Feedback
 - 若确需新题，找到已存在的最大 `Q[number]`，分配下一个未使用编号；若写入时发现页面已由另一 conversation 更新或编号冲突，重新读取后再分配；
 - 正式评估题一旦提出，立即写入同一条 `OPEN` 记录：`Question`、`Source`、`Record State: OPEN`、`My Answer: 等待回答`；
 - 用户首次回答、明确说“不会”、跳过、请求完整解或放弃后，填充这条记录的 `My Answer`、`Assessment`、`Feedback` 和必要的 `Issue`，并把 `Record State` 改为 `COMPLETE`；
+- 如果用户没有提供可判断的独立答案，例如明确说“不会”、跳过、放弃或在独立尝试前直接请求完整解，`Assessment` 使用 `UNVERIFIED`，Feedback 写明“尚无独立掌握证据”；不要把未作答伪装成 `INCORRECT`；
 - `OPEN → COMPLETE` 是同一条记录正常的首次完成，不算覆盖历史；
 - 记录成为 `COMPLETE` 后，原始 `My Answer`、原始 `Assessment` 和原始 `Feedback` 固定不变；
 - `CORRECT` 记录正向证据，不要只保存错误；
 - `PARTIAL` 或 `INCORRECT` 才在确有诊断价值时写 `Issue`；
-- `UNVERIFIED` 用于来源或提取可靠性不足，不等同于用户不会；
+- `UNVERIFIED` 也用于来源或提取可靠性不足；无论是哪种原因，都不能算 readiness 的正向证据；
 - 解答是可选校验源：substantive attempt 后或用户明确要求 reference/full solution 后才查阅；普通 hint 不先查解答；解答不可用时不阻塞流程；
 - 用户在同一轮反馈后修改同一道题时，在这个 `COMPLETE` 记录下追加 `Revision`、`Revision Assessment`、`Revision Feedback`，不改写原始字段；
 - 之后重新独立做同一道教材题属于 Retest：创建新的 Q record，并在 `Retest` 写 `Retest of RAxx/Qm — [目的]`，不要把新时间点证据塞进旧题 Revision；
@@ -178,8 +193,9 @@ Resolution
 
 ### 必须写入
 
+- Project 实际布置的 reading block，以及它的 `ASSIGNED → COMPLETED` 状态；
 - Project 实际布置并进入 assessment 的问题（题目提出时先写 `OPEN` 记录）；
-- 用户对每道题的原始回答或真实的未答/放弃状态；
+- 用户对每道题的原始回答或真实的未答/不会/跳过/放弃/直接请求完整解状态；
 - `CORRECT`、`PARTIAL`、`INCORRECT`、`UNVERIFIED` 的原始判断（能够形成判断时）；
 - 反馈、Issue、Revision、Retest 和正向证据；
 - 影响当前判断的阅读范围和下一步建议。
@@ -197,14 +213,17 @@ Notion 连接不可用、权限不足或写入返回失败时：
 
 1. 不声称已经保存；
 2. 在当前回答中说明“本条尚未写入 Review Analysis”；
-3. 保留可复制的记录内容；
-4. 连接恢复后先重新读取章节页，再补写原始题目、答案、判断和反馈，避免产生重复 Q number。
+3. 保留可复制的 reading block、题目、答案和反馈内容；
+4. 连接恢复后先重新读取章节页，再补写或完成原记录，避免产生重复 reading block 或重复 Q number。
 
 ## 8. Retrieval Rules
 
 ```text
 进入或恢复章节
-→ 先读取对应章节页顶部、最近 Study Record、OPEN 题目、Retest 记录和跨章节引用，再选择 reading block 或下一题
+→ 先读取对应章节页顶部、最近 Study Record、ASSIGNED reading block、OPEN 题目、Retest 记录和跨章节引用，再选择下一步
+
+未完成 reading block
+→ 若最近 Reading State = ASSIGNED，优先恢复该 block；只有明确 COMPLETED 后才进入后续 assessment / next reading
 
 创建正式新题
 → 再次读取最新 Study Record，确认 OPEN 状态并分配下一个未使用 Q number
@@ -227,6 +246,10 @@ Notion 连接不可用、权限不足或写入返回失败时：
 
 纯查询不创建新题目或新记录。
 
+### Q number concurrency boundary
+
+多个 conversation 可以顺序恢复同一个 knowledge chapter，但 v1 不提供同一 RAxx 中两个 conversation 同时创建正式题目的原子锁。创建新题前必须重新读取最新页面；如果发现竞争更新或编号冲突，重新分配，不覆盖已有记录。不要为此引入 Session / Question database。
+
 ## 9. Connection Requirement
 
-本结构依赖一个允许 Project 执行 Notion 写入的连接。只读同步可以用于查询（若当前连接支持），但不能满足“所有题目和学习记录都保存”的要求。
+本结构依赖一个允许 Project 执行 Notion 写入的连接。只有实际写入动作返回成功后，Project 才能说 reading block、题目或学习记录已经保存。
