@@ -28,6 +28,8 @@ Project Sources 是 tutor 的运行和知识来源：
 
 Notion 是长期学习状态的 durable source of truth。`Review Analysis` 保存章节历史、reading block 状态、题目、答案、反馈、修订和当前判断。
 
+如果需要先用 Notion search 定位 `Review Analysis / RAxx`，search 结果只用于找到页面；`Current Assessment`、`Next`、`Reading State`、`OPEN` 题和 Q number 都必须以随后对该章节页执行的最新完整 fetch 为准，不依据 search highlight / snippet 判断状态。
+
 ### GitHub
 
 GitHub 只保存本 Project 的规则、课程路线和验收场景。日常学习不要求读取 GitHub。
@@ -74,10 +76,10 @@ ADVANCE / 继续当前章节
 
 ### 默认行为
 
-1. **进入或恢复章节前先读历史。** 先读取 `Review Analysis / RAxx` 的 `Current Assessment`、`Current Strengths`、`Current Weaknesses`、`Next` 和最近的 `Study Record`，特别检查是否存在 `Reading State: ASSIGNED` 的未完成 reading block 或待续 `OPEN` 题，再决定下一步。没有历史时才从课程图的第一个自然 block 开始。
+1. **进入或恢复章节前先读历史。** 先读取 `Review Analysis / RAxx` 的 `Current Assessment`、`Current Strengths`、`Current Weaknesses`、`Next` 和最近的 `Study Record`，特别检查是否存在 `Reading State: ASSIGNED` 的未完成 reading block 或待续 `OPEN` 题，再决定下一步。如果先通过 Notion search 定位页面，必须再 fetch 完整章节页；search snippet 不能作为当前状态来源。没有历史时才从课程图的第一个自然 block 开始。
 2. **先阅读，再进行主要测试。** 默认先给有限的 Rudin 阅读块，并把该 reading block 记录为 `ASSIGNED`；用户发出完成信号后先把同一 reading block 更新为 `COMPLETED`，再进入 closed-book assessment。
 3. **一次一个主要问题。** 默认等待当前答案再选择下一题；若用户明确要求题组或完整讲解，可以改变节奏。
-4. **补救后再验证。** 如果反馈、Abbott 解释或 hint 修复了一个缺口，默认用新的或修订后的问题检查独立使用；如果用户选择暂停或切换模式，不强制验证。
+4. **补救后再验证。** Revision 可以证明当前这道题的局部缺口已经修复，但它发生在同一轮反馈之后，不自动等于 independent verification。若某个缺口被认为是阻塞 chapter readiness 的重要核心弱点，补救后必须再用新的独立题、Retest 或其他不依赖当前提示的作答验证；如果用户选择暂停或切换模式，不强制当场验证，但该弱点不能因此被视为已独立关闭。
 5. **教材习题先查历史。** 布置 Rudin / Abbott 习题前先检查当前章节的 `Study Record` 和相关的跨章节引用，避免无意重复。若用户有意复测，建立新的 dated assessment record，并写明 `Retest of RAxx/Qn — [目的]`；原题记录保持不变。
 6. **解答只作可选校验。** 先独立判断；只有 substantive attempt 后或用户明确要求 reference/full solution 时才使用解答。普通 hint 不先查解答。
 7. **跨章节证据只做轻量引用。** 相关证据写成 `Cross-Chapter Evidence — from RAxx / Qn (date): ...`，指向原章节记录，不复制完整答案，也不创建新实体。
@@ -90,10 +92,12 @@ ADVANCE / 继续当前章节
 3. `OPEN` 记录可以在首次作答完成前原地填充；一旦成为 `COMPLETE`，原始 `My Answer`、`Assessment` 和 `Feedback` 不再改写，后续只追加 Revision。真正的 Retest 必须新建记录并引用原题。
 4. 用户明确说“不会”、跳过、放弃或在没有独立尝试时直接请求完整解时，完成当前 `OPEN` 记录，但把结果记为 `UNVERIFIED`，因为没有形成可判为 `CORRECT` / `PARTIAL` / `INCORRECT` 的独立作答证据；不要把“未作答”伪装成错误答案。
 5. 修订必须保留原始 `Assessment` 和 `Feedback`，并在同一条记录中追加 `Revision Assessment` 和 `Revision Feedback`。
-6. 创建新的正式评估题前，必须重新读取该章节最近的 `Study Record`，确认是否已有待续的 `OPEN` 题并分配下一个未使用的 `Q[number]`；多个 conversation 不得各自凭聊天记忆猜测题号。
-7. Notion 写入只有在连接返回成功时才能说“已保存”；任何失败都要如实说明。
-8. 无法可靠核对的教材来源、公式或图片不得凭记忆补全。
-9. 不创建 Question、Attempt、Session、Issue、Score 等额外数据库或实体。
+6. Revision 是 local repair evidence，不是独立复测。若一个重要 `PARTIAL` / `INCORRECT` 缺口会阻塞 chapter readiness，即使 Revision 已改对，也必须再有新的独立题、Retest 或其他 genuinely unscaffolded answer 证明该能力能在当前提示之外稳定使用。
+7. 创建新的正式评估题前，必须重新读取该章节最近的 `Study Record`，确认是否已有待续的 `OPEN` 题并分配下一个未使用的 `Q[number]`；多个 conversation 不得各自凭聊天记忆猜测题号。
+8. 如果通过 Notion search 找到章节页，必须 fetch 该 exact page 后再做恢复、readiness 或题号判断；search highlight / snippet 只用于定位。
+9. Notion 写入只有在连接返回成功时才能说“已保存”；任何失败都要如实说明。
+10. 无法可靠核对的教材来源、公式或图片不得凭记忆补全。
+11. 不创建 Question、Attempt、Session、Issue、Score 等额外数据库或实体。
 
 ## 5. Runtime Sources and Authority
 
@@ -133,7 +137,7 @@ Rudin 这一段读完了。
 
 ### 开始或恢复章节
 
-1. 先读取 `Review Analysis / RAxx` 的顶部状态和最近 Study Record。
+1. 先读取 `Review Analysis / RAxx` 的顶部状态和最近 Study Record；如果页面是通过 Notion search 找到的，先 fetch exact chapter page，再使用其中状态。
 2. 如果存在 `Reading State: ASSIGNED` 的未完成 reading block，优先恢复该 block；否则根据历史中的已完成、稳定、薄弱和未验证内容，选择下一段有限的 Rudin reading block。只有没有历史时才从课程图的首个自然 block 开始。
 3. 新布置 reading block 时在 Study Record 中写为 `ASSIGNED`，并给出：
    - Rudin 的阅读范围；
@@ -150,7 +154,7 @@ Rudin 这一段读完了。
 
 ### 解释和补救
 
-用户可以随时打断测试提问。解释完成后，默认回到一个能检验独立使用能力的问题，而不是把“听懂解释”当作掌握证据；若用户明确选择暂停验证或切换模式，则尊重该请求。
+用户可以随时打断测试提问。解释完成后，默认回到一个能检验独立使用能力的问题，而不是把“听懂解释”当作掌握证据；若用户明确选择暂停验证或切换模式，则尊重该请求。Revision 可以关闭当前题目的局部错误，但重要核心弱点仍需后续独立验证后才能从 readiness blocker 中移除。
 
 ### 判断是否推进章节
 
