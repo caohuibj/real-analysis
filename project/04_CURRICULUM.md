@@ -94,6 +94,8 @@ DEEPEN
 
 `FORWARD` / `DEEPEN` enrichment 本身不构成 chapter readiness requirement；但如果其中的独立题暴露出 Rudin core 的真实弱点，该 evidence 可以阻塞 readiness。
 
+**Reactivation rule**：activation gate 在较晚 RA 并不改变 atom 的 concept anchor。Gate 满足后，Project 应把该 atom 作为“先前 anchor 的 later revisit”来 DEEPEN；可以发生在当前 conversation、旧 RA 的新 conversation 或后续综合 discussion 中，但不要把所有 late-gated material 重新命名成 RA20 内容。
+
 ### 1.6 Chapter naming
 
 `RAxx` 是本 Project 的 knowledge chapter；`Rudin Chapter n / Rudin 第 n 章` 是教材章节。一个 Rudin chapter 可以拆成多个 RA。
@@ -106,10 +108,12 @@ DEEPEN
 
 **目标**：建立后续分析立即需要的定义展开、量词、否定、反例和基本证明策略，不扩展成独立逻辑课程。
 
-**Rudin anchor**
+**Rudin anchor — locator only, not ownership**
 
 - Chapter 1 `Introduction` 中实际出现的集合/数系论证语言；
 - Chapter 2 Definition 2.1–2.2 的 function、image、inverse image，在需要时补充。
+
+Chapter 1 `Introduction` 的正式 exposition ownership 仍在 RA01；RA00 只把这些位置当作 proof-language diagnostic reference，不制造重复 reading debt。
 
 **Abbott**：§1.2 `Some Preliminaries`。
 
@@ -198,9 +202,9 @@ Appendix 可以作为 RA01 的最后一个独立 reading block，但 **RA01 read
 
 **Abbott**：§2.2–§2.6。
 
-**Analysis123 major atoms**：§4–5 sequence/Cauchy/vector convergence/Bolzano–Weierstrass；§7 complete metric/normed spaces；§12 metric completion；§29.3 对应题目。
+**Analysis123 major atoms**：§4–5 sequence/Cauchy/vector convergence/Bolzano–Weierstrass；§7 complete metric/normed spaces；§12 metric completion；§29.3 对应题目；§50 中“赋范空间完备性可由绝对可和级数判定”的 later functional-analysis return。
 
-**出口证据**：`ε-N`；subsequence/BW；Cauchy vs completeness；`lim sup/lim inf`；能识别 completion argument。
+**出口证据**：`ε-N`；subsequence/BW；Cauchy vs completeness；`lim sup/lim inf`；能识别 completion argument；能在后续函数空间中认出同一个 completeness pattern。
 
 ---
 
@@ -220,7 +224,7 @@ Appendix 可以作为 RA01 的最后一个独立 reading block，但 **RA01 read
 
 **Abbott**：§2.1、§2.4 series 部分、§2.7–§2.8。
 
-**Analysis123 major atoms**：§4–5 series Cauchy/absolute convergence；§6 double-index sums；§6.1 rearrangement/Cesàro；§7 product series/ζ/Dirichlet-Abel；§7.1 primes reciprocal/Basel；§23 Leibniz series；§23.1 ζ(2)；§25.1 与 summation 有关的 atom。
+**Analysis123 major atoms**：§4–5 series Cauchy/absolute convergence/`e` construction；§6 double-index sums；§6.1 rearrangement/Cesàro；§7 product series/ζ/Dirichlet-Abel；§7.1 primes reciprocal/Basel；§23 Leibniz series；§23.1 ζ(2)；§25.1 与 summation 有关的 atom。
 
 **出口证据**：absolute/conditional；test selection；summation by parts；Cauchy products/rearrangements；power-series convergence as a series problem。
 
@@ -260,9 +264,9 @@ Appendix 可以作为 RA01 的最后一个独立 reading block，但 **RA01 read
 
 **Abbott**：§5.1–§5.4。
 
-**Analysis123 major atoms**：§13–14 derivative/Leibniz/Faà di Bruno/vector-valued/extrema/MVT；§15 Darboux/Cauchy MVT/trigonometric ODE；§15.1 Takagi；§16 L'Hôpital/Taylor；§17 convexity/Jensen；§17.1 Borel lemma/Peano as forward；§58–59 generalized derivative 只做 bounded forward，完整 activation later。
+**Analysis123 major atoms**：§13–14 derivative/Leibniz/Faà di Bruno/vector-valued/extrema/MVT；§15 `x ↦ exp(xA)` derivative、Darboux/Cauchy MVT/trigonometric ODE；§15.1 Takagi；§16 L'Hôpital/Taylor；§17 convexity/Jensen；§17.1 Borel lemma/Peano as forward；§58–59 generalized derivative 只做 bounded forward，完整 activation later。
 
-**出口证据**：definition-based derivative proof；MVT/Rolle hypotheses；Darboux boundary；finite Taylor remainder；vector-valued/convexity transfer。
+**出口证据**：definition-based derivative proof；MVT/Rolle hypotheses；Darboux boundary；finite Taylor remainder；vector-valued/convexity transfer；能把一元参数下的 matrix-valued differentiation 与后续 linear-map viewpoint 对接。
 
 ---
 
@@ -275,13 +279,13 @@ Appendix 可以作为 RA01 的最后一个独立 reading block，但 **RA01 read
 - `Integration and Differentiation`
 - `Rectifiable Curves`
 
-`Rectifiable Curves` 可以放在后一个 reading block，但 **RA09 readiness 前必须完成**。
+`Integration and Differentiation` 的实际正文范围包含 vector-valued integration；它虽不是单独 TOC heading，也必须随该 section 的完整 reading 一并覆盖。`Rectifiable Curves` 可以放在后一个 reading block，但 **RA09 readiness 前必须完成**。
 
 **Abbott**：§7.1–§7.6；§8.1 generalized Riemann integral 作为 enrichment。
 
-**Analysis123 major atoms**：§18–21 Riemann/Darboux/integrability/Lebesgue criterion；§19.1 Sturm–Liouville；§22 improper integral/Wallis/Stirling；§23 parameter integrals；§24–25 integral/ODE/variational examples 中积分部分；§26–27 Stieltjes；§27.1 oscillatory integrals；§28 Liouville antiderivative；§29 Riemann–Lebesgue/vdC 的 integration side；§29.2、§48.2、§51.2、§53.2 与 Riemann definition 相关题按 item 使用。
+**Analysis123 major atoms**：§18–21 Riemann/Darboux/integrability/Lebesgue criterion；§19.1 Sturm–Liouville；§20 substitution/antiderivative/π 的几何意义；§22 improper integral/Euler constant/Wallis/Stirling；§23 parameter integrals；§24–25 integral/ODE/variational examples 中积分部分；§26–27 Stieltjes；§27.1 oscillatory integrals；§28 Liouville antiderivative；§29 Riemann–Lebesgue/vdC 的 integration side；§29.2 elliptic-integral / Chudnovsky application；§48.2、§51.2、§53.2 与 Riemann definition 相关题按 item 使用。
 
-**出口证据**：integrability criteria；Riemann vs Riemann–Stieltjes；FTC hypotheses；rectifiable curves；improper/parameter/oscillatory boundary recognition。
+**出口证据**：integrability criteria；Riemann vs Riemann–Stieltjes；FTC hypotheses；vector-valued integral basics；rectifiable curves；improper/parameter/oscillatory boundary recognition。
 
 ---
 
@@ -300,7 +304,7 @@ Appendix 可以作为 RA01 的最后一个独立 reading block，但 **RA01 read
 
 **Analysis123 major atoms**：§11 pointwise/uniform + `C([a,b]), ||·||∞`；§12 function series/function-space completeness；§20.1 Dini；§51 convolution/function approximation concept anchor；§52 smooth `L1` approximation as forward；§54 approximate identities cross RA11。
 
-**出口证据**：pointwise vs uniform；interchange limit/continuity/integration/differentiation；uniform Cauchy; equicontinuity；function-space norm viewpoint。
+**出口证据**：pointwise vs uniform；interchange limit/continuity/integration/differentiation；uniform Cauchy；equicontinuity；Arzelà–Ascoli-type compactness argument；function-space norm viewpoint。
 
 ---
 
@@ -325,7 +329,7 @@ Algebraic completeness 与 Gamma 可以作为后置 reading blocks，但 **RA11 
 
 **Abbott**：§6.5、§6.6、§8.3。
 
-**Analysis123 major atoms**：§6 exp/trig construction；§15 trig ODE/π；§20.1 Weierstrass–Stone；§22 Stirling；§29 oscillation/RL/vdC；§52–57 Fourier approximation/convergence/kernels/counterexamples/equidistribution/Roth；§65 complex toolkit concept anchor；§65.1–68 Fourier transform/distributional Fourier 先做 forward，完整深挖受 activation gate 控制。
+**Analysis123 major atoms**：§6 exp/trig construction；§15 trig ODE/π；§20.1 Weierstrass–Stone；§22 Stirling；§29 oscillation/RL/vdC；§52–55 Fourier `L2` preview、smoothness↔frequency decay、kernels、localization、convergence theorems/counterexamples；§55.1 Fourier computation/spherical harmonics；§56 Bernstein theorem/equidistribution；§57 Roth；§57.1 `L1` divergence；§57.2 Maass-wave expansion；§65 complex toolkit concept anchor；§65.1–68 Fourier transform/distributional Fourier 先做 forward，完整深挖受 activation gate 控制。
 
 **出口证据**：power-series uniform/termwise operations；smooth vs analytic vs Taylor equality；polynomial approximation；Stone–Weierstrass；Fourier transfer；能说明 algebraic completeness、Fourier、Gamma 在本章中的角色。
 
@@ -340,7 +344,7 @@ Algebraic completeness 与 Gamma 可以作为后置 reading blocks，但 **RA11 
 
 **Abbott**：没有系统多元章节；复用 derivative-as-local-linearization、metric/compactness 等已学 conceptual language，不虚构对应 reading。
 
-**Analysis123 major atoms**：§30 directional/partial/differentiability/extrema；§31 differential/Jacobian/chain rule/inverse differential/matrix exponential；§31.1 homogeneous/Euler；§32 coordinate/diffeomorphism/Clairaut/Taylor 中属于 local linearization 的部分。
+**Analysis123 major atoms**：§30 directional/partial/differentiability/extrema；§31 differential/Jacobian/chain rule/inverse differential/matrix exponential；§31.1 homogeneous/Euler；§32 coordinate/diffeomorphism/Clairaut/Taylor 中属于 local linearization 的部分；回看 §15 的 matrix exponential derivative 作为一元到线性映射微分的 bridge。
 
 **出口证据**：derivative as best linear approximation；partial/directional ≠ differentiability；chain rule in linear-map form；Jacobian/operator norm estimates。
 
@@ -384,7 +388,7 @@ Algebraic completeness 与 Gamma 可以作为后置 reading blocks，但 **RA11 
 - `Partitions of Unity`
 - `Change of Variables`
 
-**Analysis123 major atoms**：§44 Fubini dimensional reduction（measure proof activation RA19）；§44.1 Gaussian/Archimedes；§45 abstract change of variables/Borel regularity split；§46 coordinate substitutions/determinant/graph integration；§47 cutoff/partition of unity；高维 Riemann definition exercise atoms retrospective transfer。
+**Analysis123 major atoms**：§44 Fubini dimensional reduction（measure proof activation RA19）；§44.1 Gaussian/Archimedes；§45 abstract change of variables/Borel regularity split；§46 coordinate substitutions/determinant/graph integration；§47 n-sphere volume/Archimedes formula、cutoff/partition of unity；高维 Riemann definition exercise atoms retrospective transfer。
 
 **出口证据**：Rudin integration construction；primitive mapping/partition role；change-of-variables hypotheses；determinant as volume distortion；coordinate proof organization。
 
@@ -411,7 +415,7 @@ Algebraic completeness 与 Gamma 可以作为后置 reading blocks，但 **RA11 
 - `Closed Forms and Exact Forms`
 - `Vector Analysis`
 
-**Analysis123 major atoms**：§47 first Stokes proof/boundary normal；§48 Sard-type/differential-topological proof；§48.1 exercises；§49 first/second-kind submanifold integrals/divergence/Green/Gauss-Ostrogradsky/physical divergence；§51.1 Stokes applications；§59 distributional Stokes forward；§60 Cauchy/fundamental-solution cross-domain；§63–64 integration-by-parts/PDE connection forward。
+**Analysis123 major atoms**：§47 first Stokes proof/boundary normal；§48 Sard-type lemma 与 differential-topological Stokes proof 在此建立 concept anchor，但严格使用零测集的完整版本 activation gate 为 RA18；§48.1 exercises；§49 first/second-kind submanifold integrals/divergence/Green/Gauss-Ostrogradsky/physical divergence；§51.1 Stokes applications；§59 distributional Stokes forward；§60 Cauchy/fundamental-solution cross-domain；§63–64 integration-by-parts/PDE connection forward。
 
 **出口证据**：boundary orientation/signs；Stokes unifies FTC/Green/divergence；closed vs exact local/global；form-based vector-analysis strategy。
 
@@ -427,9 +431,9 @@ Algebraic completeness 与 Gamma 可以作为后置 reading blocks，但 **RA11 
 - `Measurable Functions`
 - `Simple Functions`
 
-**Analysis123 major atoms**：§38 σ-algebra/Borel/product/measurable maps；§39 measures/σ-finite/Carathéodory；§40 pushforward/Lebesgue/translation/scaling/completion/simple functions；§41.1 Stieltjes measure/Borel–Cantelli/null-set atoms；§43.1 decimal intervals/measure atoms；§43.2 probability-space structure；§46.1 non-Borel set；§58 Radon measures → distributions as forward。
+**Analysis123 major atoms**：§38 σ-algebra/Borel/product/measurable maps；§39 measures/σ-finite/Carathéodory；§40 pushforward/Lebesgue/translation/scaling/completion/simple functions；§41.1 submanifold null sets、Stieltjes measure、Borel–Cantelli/null-set atoms；§43.1 decimal intervals/measure atoms；§43.2 probability-space structure；§46.1 non-Borel set；§48 Sard-type null-image argument 的 measure-theoretic deepening；§58 Radon measures → distributions as forward。
 
-**出口证据**：σ-algebra/Borel/completion；generators/measurability；outer-measure/extension purpose；null sets/pushforward/σ-finiteness。
+**出口证据**：σ-algebra/Borel/completion；generators/measurability；outer-measure/extension purpose；null sets/pushforward/σ-finiteness；能识别“几何对象/奇异集为何是零测”的典型机制。
 
 ---
 
@@ -441,7 +445,7 @@ Algebraic completeness 与 Gamma 可以作为后置 reading blocks，但 **RA11 
 
 并覆盖该 section 内的 monotone convergence、Fatou、dominated convergence 等完整 exposition。
 
-**Analysis123 major atoms**：§41 simple-function integration/a.e./Beppo Levi；§42 Riemann-Lebesgue comparison/`L1`/Fatou/DCT/parameter continuity；§43 differentiation under integral/product measure；§43.1 DCT exercises；§43.2 probability integration；§44 product measure/Fubini；§44.1 Gaussian；§45 measure-theoretic regularity/change of variables；§51–52 `L1` convolution/approximation concept anchor；§57.1 `L1` Fourier divergence boundary。
+**Analysis123 major atoms**：§41 simple-function integration/a.e./Beppo Levi；§42 Riemann-Lebesgue comparison/`L1`/Fatou/DCT/parameter continuity；§43 differentiation under integral/product measure；§43.1 DCT exercises；§43.2 probability integration；§44 product measure/Fubini；§44.1 Gaussian；§45 measure-theoretic regularity/change of variables；§51–52 `L1` convolution/approximation concept anchor；§57.1 `L1` Fourier divergence boundary；§62 convolution activation；§63–64 fundamental-solution integration layer。
 
 **出口证据**：integral construction；MCT/Fatou/DCT selection；a.e. consequences；Fubini/Tonelli conditions；parameter-limit problems。
 
@@ -455,7 +459,9 @@ Algebraic completeness 与 Gamma 可以作为后置 reading blocks，但 **RA11 
 - `Integration of Complex Functions`
 - `Functions of Class L2`
 
-**Analysis123 major atoms**：§50 Hilbert/Fischer–Riesz；§51 `L2/L∞` completeness/continuous operators；§52 Hilbert basis/Fourier `L2`；§53 higher-dimensional Fourier `L2`；§66 Plancherel/Schwartz；§67–71 tempered Fourier/Sobolev/Riesz/projection/duality 的完整 deepening 以 RA20 为主要 activation gate；§72–85 的 domain Sobolev/spectral/heat/Weyl/microlocal内容作为 **post-core deepening network**，不作为 RA20 readiness burden。
+**Analysis123 major atoms**：§50 Hilbert/Fischer–Riesz；§51 `L2/L∞` completeness/continuous operators；§52 Hilbert basis/Fourier `L2`；§53 higher-dimensional Fourier `L2`；§66 Plancherel/Schwartz；§67–71 tempered Fourier/Sobolev/Riesz/projection/duality 的完整 deepening 以 RA20 为主要 activation gate。
+
+§72–85 需要的 prerequisite 多数直到 RA20 才齐，但它们是 **post-core deepening network，不是 RA20 内容堆栈**。Gate 满足后按 concept anchor 回访：compact spectral theory 回 RA04/RA20，Fourier/heat/Weyl 回 RA11/RA20，local geometry 回 RA13/RA14，locality/wavefront 回 RA03/RA11/RA14。
 
 **出口证据**：Riemann vs Lebesgue；complex integral；`L2` inner product/norm；Hilbert/Fourier bridge；能对至少一个 advanced push 指出其依赖的 Rudin concepts。
 
@@ -473,12 +479,12 @@ Algebraic completeness 与 Gamma 可以作为后置 reading blocks，但 **RA11 
 | Ch2 Compact Sets; Perfect Sets; Connected Sets | RA04 |
 | Ch3 Convergent Sequences; Subsequences; Cauchy Sequences; Upper/Lower Limits; Special Sequences | RA05 |
 | Ch3 Series; Nonnegative Series; e; Root/Ratio Tests; Power Series; Summation by Parts; Absolute Convergence; Addition/Multiplication; Rearrangements | RA06 |
-| Ch4 all exposition sections | RA07 |
-| Ch5 all exposition sections | RA08 |
-| Ch6 all exposition sections, including Rectifiable Curves | RA09 |
-| Ch7 Discussion through Equicontinuous Families | RA10 |
+| Ch4 Limits of Functions; Continuous Functions; Continuity and Compactness; Continuity and Connectedness; Discontinuities; Monotonic Functions; Infinite Limits and Limits at Infinity | RA07 |
+| Ch5 Derivative; Mean Value Theorems; Continuity of Derivatives; L'Hôpital; Higher Derivatives; Taylor; Vector-valued Differentiation | RA08 |
+| Ch6 Definition/Existence; Properties; Integration and Differentiation; Rectifiable Curves | RA09 |
+| Ch7 Discussion; Uniform Convergence; Uniform+Continuity; Uniform+Integration; Uniform+Differentiation; Equicontinuous Families | RA10 |
 | Ch7 Stone–Weierstrass | RA11 |
-| Ch8 all exposition sections, including Algebraic Completeness and Gamma | RA11 |
+| Ch8 Power Series; Exp/Log; Trigonometric; Algebraic Completeness; Fourier Series; Gamma | RA11 |
 | Ch9 Linear Transformations; Differentiation | RA12 |
 | Ch9 Contraction; Inverse Function; Implicit Function; Rank | RA13 |
 | Ch9 Determinants; Higher Derivatives; Differentiation of Integrals | RA14 |
@@ -488,6 +494,8 @@ Algebraic completeness 与 Gamma 可以作为后置 reading blocks，但 **RA11 
 | Ch11 Set Functions; Lebesgue Measure Construction; Measure Spaces; Measurable Functions; Simple Functions | RA18 |
 | Ch11 Integration | RA19 |
 | Ch11 Riemann Comparison; Complex Integration; L2 | RA20 |
+
+**Audit result**：对当前上传 Rudin 的目录逐章核对后，Ch1–Ch11 的全部 exposition headings 均在上表恰有一个 owner。Ch6 中 vector-valued integration 是 `Integration and Differentiation` section 内部正文，不是额外 TOC heading；因此不新增 owner，但 reading range 与 RA09 evidence 必须明确覆盖它。
 
 如果上传版本的目录标题有轻微排版差异，以实际 Rudin PDF 正文/目录为准，但不得把任何 exposition section 因标题差异而漏掉。
 
@@ -557,16 +565,16 @@ Section locator 只回答“这节不会丢在哪里”；标记 `SPLIT` 的条�
 | §12.1 | RA03 / RA04 | TRANSFER |
 | §12.2 | RA07 / RA04 | FORWARD / TRANSFER |
 | §13–§14 | RA08 | INLINE / TRANSFER |
-| §15 | RA08 / RA11 | SPLIT |
+| §15 | RA08 / RA11 / RA12 | SPLIT |
 | §15.1 | RA08 | TRANSFER |
 | §16 | RA08 / RA07 | SPLIT |
 | §17 | RA08 | TRANSFER |
 | §17.1 | RA08 / RA11 | FORWARD |
 | §18–§19 | RA09 | INLINE |
 | §19.1 | RA09 | TRANSFER |
-| §20 | RA09 | INLINE / TRANSFER |
+| §20 | RA09 / RA11 | SPLIT |
 | §20.1 | RA10 / RA11 | SPLIT |
-| §21–§23 | RA09 | SPLIT |
+| §21–§23 | RA09 / RA11 | SPLIT |
 | §23.1 | RA06 / RA09 / RA10 | item routing |
 | §24 | RA09 / RA13 | SPLIT |
 | §25 | RA09 / RA08 | SPLIT |
@@ -596,26 +604,26 @@ Section locator 只回答“这节不会丢在哪里”；标记 `SPLIT` 的条�
 | §37.2 | RA13 / RA14 | SPLIT |
 | §38–§40 | RA18 | INLINE / TRANSFER |
 | §41 | RA19 | INLINE |
-| §41.1 | RA02 / RA18 / RA19 | SPLIT / item routing |
-| §42–§44 | RA19 | SPLIT |
+| §41.1 | RA02 / RA17 / RA18 / RA19 | SPLIT / item routing |
+| §42–§44 | RA15 / RA19 | SPLIT |
 | §43.1–§43.2 | RA02 / RA07 / RA18 / RA19 | SPLIT / item routing |
 | §44.1 | RA15 / RA19 | TRANSFER |
 | §45 | RA15 / RA18 / RA19 | SPLIT |
 | §46 | RA15 / RA16 / RA17 | SPLIT |
 | §46.1 | RA18 | TRANSFER |
-| §47–§49 | RA15 / RA16 / RA17 / RA19 | SPLIT |
+| §47–§49 | RA15 / RA16 / RA17 / RA18 / RA19 | SPLIT |
 | §48.1 | RA17 / RA19 | item routing |
 | §48.2 | RA09 / RA15 | retrospective transfer |
-| §50 | RA04 / RA13 / RA20 | SPLIT |
-| §51 | RA10 / RA17 / RA19 / RA20 | SPLIT |
+| §50 | RA04 / RA05 / RA13 / RA20 | SPLIT |
+| §51 | RA10 / RA13 / RA17 / RA19 / RA20 | SPLIT |
 | §51.1 | RA17 | item routing |
 | §51.2 | RA09 / RA15 | retrospective transfer |
-| §52–§53 | RA10 / RA11 / RA19 / RA20 | SPLIT |
-| §53.1 | RA17 / RA20 | FORWARD |
+| §52–§53 | RA10 / RA11 / RA17 / RA19 / RA20 | SPLIT |
+| §53.1 | RA17 / RA20 | FORWARD / application |
 | §53.2 | RA09 / RA15 | retrospective transfer |
-| §54–§55 | RA11 / RA20 | SPLIT |
+| §54–§55 | RA10 / RA11 / RA20 | SPLIT |
 | §55.1 | RA11 / RA20 | item routing |
-| §56–§57 | RA11 / RA20 | advanced application |
+| §56–§57 | RA06 / RA11 / RA20 | advanced application |
 | §57.1 | RA11 / RA19 / RA20 | BOUNDARY |
 | §57.2 | RA11 / RA20 | advanced application |
 
@@ -627,28 +635,29 @@ Section locator 只回答“这节不会丢在哪里”；标记 `SPLIT` 的条�
 |---|---|---|
 | §58 distributions: Radon/local integrable/PV | RA18 measures; RA08/RA14 derivative extension | RA18 COMPLETE |
 | §59 distribution operations / distributional Stokes | RA08/RA14 derivatives; RA17 Stokes | RA17 COMPLETE |
-| §60 partition unity / Cauchy / fundamental-solution bridge | RA15 partitions; RA17 Stokes | RA17 COMPLETE |
-| §61 support / locality | RA03 topology; RA14 local differential operators | RA18 COMPLETE |
+| §60 jump formula / Cauchy / fundamental-solution / partition-unity bridge | RA08 derivatives; RA15 partitions; RA17 Stokes | RA17 COMPLETE |
+| §61 support / locality / point-support structure | RA03 topology; RA14 local differential operators | RA18 COMPLETE |
 | §61.1 | same as §61 | matching prerequisites |
 | §62 convolution | RA10 approximation; RA19 `L1` integration | RA19 COMPLETE |
-| §63–§64 PDE fundamental solutions | RA14 differential operators; RA17 integration by parts; RA19 integration | RA19 COMPLETE |
-| §63.1 | same network | RA19 COMPLETE |
+| §63–§64 convolution continuity / PDE fundamental solutions / elliptic-wave examples | RA14 differential operators; RA17 integration by parts; RA19 integration | RA19 COMPLETE + distribution basics |
+| §63.1 | same network | RA19 COMPLETE + distribution basics |
 | §65 complex-analysis toolkit | RA11 special functions/Fourier; RA17 forms | RA17 COMPLETE |
 | §65.1 `L1` Fourier transform | RA11 Fourier; RA19 `L1` | RA19 COMPLETE |
 | §66 Plancherel / Schwartz | RA11 Fourier; RA20 `L2` | RA20 core reached |
 | §66.1 | same as §66 | RA20 core reached |
 | §67–§68 tempered distributions / Fourier / convolution | RA11 Fourier; RA14 derivative; RA19 convolution/integration; RA20 `L2` | RA20 core reached |
 | §69 PDE operators / Sobolev | RA14 differential operators; RA20 `L2`/Fourier | RA20 core reached |
-| §70 Sobolev/multipliers/embedding | RA20 functional/Fourier; RA04 compactness as concept link | RA20 core reached |
+| §70 Sobolev/multipliers/embedding + compact-support distribution structure | RA14 derivatives; RA20 functional/Fourier; RA04 compactness concept link | RA20 core reached |
 | §70.1 | RA11 Fourier; RA20 Sobolev | RA20 core reached |
-| §71 Riesz/projection/duality/trace | RA20 Hilbert | RA20 core reached |
-| §72–§76 domain Sobolev/trace/extension/Dirichlet/elliptic/variational | RA13 local coordinates; RA17 boundary/Stokes; RA20 functional analysis | RA20 COMPLETE |
+| §71 Riesz/projection/duality/trace | RA20 Hilbert; RA17 boundary intuition | RA20 core reached |
+| §72–§76 domain Sobolev/Poincaré/trace/extension/Dirichlet/elliptic/variational | RA13 local coordinates; RA17 boundary/Stokes; RA20 functional analysis | RA20 COMPLETE |
 | §72.1 / §75.1 / §76.1 | same network | item-level prerequisites |
 | §77 compact/self-adjoint operators/weak convergence | RA04 compactness; RA20 Hilbert | RA20 COMPLETE |
-| §78–§79 compact spectral/Laplacian eigenfunctions/variational spectrum | RA04 compactness; RA11 Fourier; RA20 Hilbert | RA20 COMPLETE |
-| §80–§82 Sobolev regularity/heat kernel/Weyl | RA14 differential operators; RA19 integration; RA20 spectral/Fourier | RA20 COMPLETE |
-| §83 wavefront set / nonstationary phase / diffeomorphism | RA03 locality; RA11 Fourier; RA13 diffeomorphism | RA20 COMPLETE + distribution/Fourier deepening |
-| §84–§85 microlocal ellipticity / bicharacteristics / propagation | RA13 local geometry; RA14 differential operators; RA11 Fourier | RA20 COMPLETE + §83 deepening |
+| §78–§79 Hilbert–Schmidt / compact spectral / Laplacian eigenfunctions / variational spectrum | RA04 compactness; RA11 Fourier; RA20 Hilbert | RA20 COMPLETE |
+| §80–§81 Sobolev regularity / boundary eigenfunctions / heat kernel / maximum principle | RA14 differential operators; RA19 integration; RA20 spectral/Fourier | RA20 COMPLETE |
+| §82 heat-kernel asymptotics / Karamata / Weyl + wavefront-set definition | spectral part: RA04/RA11/RA20; wavefront part: RA03 locality + RA11 Fourier + RA14 operators | RA20 COMPLETE + distribution/Fourier deepening |
+| §83 wavefront equivalent definitions / nonstationary phase / diffeomorphism | RA03 locality; RA11 Fourier; RA13 diffeomorphism | RA20 COMPLETE + distribution/Fourier deepening |
+| §84–§85 microlocal ellipticity / parametrix / bicharacteristics / propagation | RA13 local geometry; RA14 differential operators; RA11 Fourier | RA20 COMPLETE + §83 deepening |
 | §86.1–§86.3 | all relevant anchors | item-level routing before use |
 
 ---
@@ -661,6 +670,7 @@ Section locator 只回答“这节不会丢在哪里”；标记 `SPLIT` 的条�
 |---|---|---|
 | §2 nested intervals / supremum equivalence | RA01 | INLINE/TRANSFER |
 | §2 metric-space introduction | RA03 | INLINE |
+| §5 vector sequences / BW / `e` / absolute convergence / domination tests | RA05 / RA06 | SPLIT by skill |
 | §6 exp/trig construction | RA11 | TRANSFER |
 | §6 double-index summation | RA06 | TRANSFER |
 | §6.1 rearrangement / Cesàro | RA06 | TRANSFER |
@@ -675,10 +685,13 @@ Section locator 只回答“这节不会丢在哪里”；标记 `SPLIT` 的条�
 | §11 `C([a,b]), ||·||∞` | RA10 | TRANSFER |
 | §12 continuous functions from convergent series | RA10 | TRANSFER |
 | §12 metric completion | RA05 / RA03 | TRANSFER |
+| §15 `x ↦ exp(xA)` derivative | RA08 / RA12 | one-parameter derivative → linear-map bridge |
 | §15 MVT / Darboux / Cauchy MVT | RA08 | TRANSFER |
 | §15 trig functions via ODE | RA11 / RA08 | TRANSFER |
+| §20 substitution / antiderivative / geometric meaning of π | RA09 / RA11 | APPLICATION |
 | §20.1 Dini theorem | RA10 | TRANSFER |
 | §20.1 Weierstrass–Stone | RA11 | TRANSFER |
+| §22 Euler constant / Wallis / Stirling / improper convergence | RA09 / RA11 | APPLICATION / boundary |
 | §23 parameter differentiation examples | RA09 / RA14 | preview then deepen |
 | §24 ODE existence/uniqueness via contraction | RA13 | TRANSFER |
 | §24 Kepler / variational / integration atoms | RA09 | APPLICATION |
@@ -686,6 +699,7 @@ Section locator 只回答“这节不会丢在哪里”；标记 `SPLIT` 的条�
 | §28 Liouville elementary-antiderivative theorem | RA09 | APPLICATION |
 | §29 Riemann–Lebesgue | RA09 / RA11 | TRANSFER |
 | §29 van der Corput oscillatory estimate | RA09 / RA11 | APPLICATION |
+| §29.2 elliptic integral / Chudnovsky approximation | RA09 / RA11 | capstone application |
 | §32 diffeomorphism / pullback coordinates | RA12 / RA13 | TRANSFER |
 | §32 Clairaut / multivariable Taylor | RA14 | TRANSFER |
 | §34 regular level sets / local graph | RA13 | TRANSFER |
@@ -694,6 +708,7 @@ Section locator 只回答“这节不会丢在哪里”；标记 `SPLIT` 的条�
 | §36–§37 Lagrange multipliers | RA14 | TRANSFER |
 | §37 Hessian / second derivative / convexity | RA14 | TRANSFER |
 | §38–§40 σ-algebra/Borel/measure/Carathéodory/Lebesgue/pushforward/completion | RA18 | INLINE/TRANSFER |
+| §41.1 submanifold null sets | RA17 concept; RA18 measure gate | DEEPEN |
 | §41.1 Stieltjes measure / Borel–Cantelli | RA18 | TRANSFER |
 | §41.1 Diophantine/null-set applications | RA02 / RA18 | APPLICATION |
 | §42 MCT/Fatou/DCT/`L1` | RA19 | INLINE/TRANSFER |
@@ -709,10 +724,13 @@ Section locator 只回答“这节不会丢在哪里”；标记 `SPLIT` 的条�
 | §45 abstract/diffeomorphic change of variables | RA15 / RA19 | DEEPEN |
 | §46 coordinate substitutions / determinant geometry | RA15 | APPLICATION |
 | §46 graph/submanifold integration | RA16 / RA17 | geometric bridge |
+| §47 n-sphere volume / Archimedes formula | RA15 / RA17 | APPLICATION |
 | §47 cutoff/partition of unity | RA15 | TRANSFER |
 | §47–§49 submanifold measure/integration/orientation | RA16 / RA17 | TRANSFER |
 | §47–§49 Stokes/divergence/Green/physical divergence | RA17 | TRANSFER/APPLICATION |
+| §48 Sard-type null-image lemma | RA13 rank + RA17 Stokes; RA18 measure gate | FORWARD → DEEPEN |
 | §50 Brouwer fixed point | RA04 / RA13 | FORWARD |
+| §50 completeness-by-series criterion in normed spaces | RA05 concept; RA20 functional return | FORWARD → DEEPEN |
 | §50 Hilbert/Fischer–Riesz | RA20 | DEEPEN |
 | §51 tangent vector fields | RA17 / RA13 | FORWARD |
 | §51 `L2/L∞` completeness/operators/extension | RA20 | DEEPEN |
@@ -720,18 +738,41 @@ Section locator 只回答“这节不会丢在哪里”；标记 `SPLIT` 的条�
 | §52 Hilbert basis/Fourier `L2` | RA20 | DEEPEN |
 | §52 smooth `L1` approximation | RA19 / RA10 | TRANSFER |
 | §53 higher-dimensional Fourier series | RA11 / RA20 | FORWARD then deepen |
+| §53.1 wave-equation local energy estimate | RA17 / RA20 | APPLICATION |
+| §54 smoothness ↔ frequency decay | RA11 concept; RA20 Fourier-transform return | FORWARD → DEEPEN |
 | §54 Dirichlet/Féjer kernels / approximate identity | RA11 / RA10 | TRANSFER |
 | §55 convergence theorems / du Bois-Reymond | RA11 | BOUNDARY/TRANSFER |
-| §56 equidistribution | RA11 / RA06 | APPLICATION |
+| §55.1 Fourier computation / trig-to-spherical-harmonic connection | RA11 / RA20 | APPLICATION |
+| §56 Bernstein theorem | RA11 | TRANSFER / boundary |
+| §56 equidistribution application | RA11 / RA06 | APPLICATION |
 | §57 Roth 3-AP | RA11 | advanced application |
 | §57.1 `L1` Fourier divergence | RA11 / RA19 | BOUNDARY |
+| §57.2 Maass-wave expansion | RA11 Fourier; RA20 spectral/Hilbert | FORWARD → DEEPEN |
 | §§58–59 generalized function / derivative / Stokes | RA18 / RA14 / RA17 | preview at anchors, deepen after gates |
+| §60 jump formula / Cauchy / fundamental solution | RA08 / RA17 | deepen after distribution gate |
+| §61 point-support/locality structure theorem | RA03 / RA14 | deepen after distribution gate |
 | §62 convolution of distributions | RA10 / RA19 | deepen after distribution gate |
-| §§63–64 fundamental solutions | RA14 / RA17 / RA19 | advanced application |
+| §63 Cauchy–Riemann elliptic regularity + heat fundamental solution | RA14 / RA19 | advanced application after distribution gate |
+| §§63–§64 fundamental solutions / wave equation | RA14 / RA17 / RA19 | advanced application |
 | §§65.1–68 Fourier transform / Plancherel / Schwartz / tempered distributions | RA11 / RA19 / RA20 | staged FORWARD → DEEPEN |
+| §70 compact-support distribution structure theorem | RA14 derivative structure + RA20 Fourier/Sobolev | DEEPEN after RA20 core |
 | §§69–76 Sobolev / trace / elliptic / variational | RA14 / RA17 / RA20 | staged DEEPEN after RA20 core |
-| §§77–82 compact spectral / heat / Weyl | RA04 / RA11 / RA20 | post-core deepening network |
-| §§83–85 wavefront / microlocal ellipticity / propagation | RA03 / RA11 / RA13 / RA14 | post-core deepening after distribution/Fourier prerequisites |
+| §72 Poincaré inequality | RA17 boundary/derivative intuition; RA20 Sobolev | DEEPEN |
+| §§77–79 compact operator / Hilbert–Schmidt / Laplacian spectrum / variational eigenvalues | RA04 / RA11 / RA20 | post-core deepening with old anchors reactivated |
+| §§80–81 eigenfunction regularity / heat kernel / maximum principle | RA14 / RA19 / RA20 | post-core deepening |
+| §82 Karamata/Weyl asymptotics | RA04 / RA11 / RA20 | spectral-asymptotic deepening |
+| §82 wavefront-set definition | RA03 locality / RA11 Fourier / RA14 differential operators | activate after distribution + Fourier deepening |
+| §§83–85 wavefront / nonstationary phase / microlocal ellipticity / parametrix / bicharacteristics / propagation | RA03 / RA11 / RA13 / RA14 | post-core deepening after distribution/Fourier prerequisites |
+
+### 6.1 Audit interpretation
+
+这个表不是另一个 syllabus checklist，而是 tutor-side coverage audit：
+
+- **同一 section 的不同 atom 可以落到不同 RA**；
+- **late gate 不覆盖 early anchor**；gate 满足后优先“reactivate old anchor”；
+- 一个 atom 在某 RA 做过短 FORWARD，不代表其完整理论已经学过；
+- composite homework / exam 仍需 item-level routing；
+- 如果以后正文检查发现新的重要 named theorem / method / application cluster，应补入本 audit，而不是因为 section locator 已存在就当作不会遗漏。
 
 ---
 
@@ -783,6 +824,8 @@ Rudin finite reading block
 ```
 
 不是每个 loop 都必须机械包含两个 tutor-side push；`04` 的 coverage ledgers 用于长期保证材料被有意识地调用，而不是要求一次聊天塞满所有素材。
+
+当 later activation gate 满足时，可以自然插入一个 `DEEPEN` loop，回访早先 RA 的 concept anchor；这不改变 RA 编号，也不创建新的 curriculum namespace。
 
 ---
 
