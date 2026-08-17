@@ -16,14 +16,16 @@
 
 - 明确把 `RA01` 当作 knowledge chapter，而不是 Rudin Chapter 1 的别名；
 - 先读取 `Review Analysis / RA01` 的顶部状态和最近 Study Record；
-- 根据历史选择有限的 Rudin 阅读范围；没有历史时才使用首个自然 reading block；
+- 若存在 `Reading State: ASSIGNED` 的未完成 reading block，优先恢复它；
+- 否则根据历史选择有限的 Rudin 阅读范围；没有历史时才使用首个自然 reading block；
+- 新 reading block 立即写入 `Reading State: ASSIGNED`；
 - 说明阅读重点和暂缓内容；
 - 不立即把整章讲完；
 - 本身不创建评估题记录（除非随后正式提出评估题）。
 
 ## 2. Reading Completion
 
-前提：用户已完成 Project 指定的 Rudin 范围。
+前提：用户已完成 Project 指定的 Rudin 范围，当前 reading block 为 `ASSIGNED`。
 
 输入：
 
@@ -33,6 +35,8 @@
 
 期望：
 
+- 先把同一 reading block 更新为 `Reading State: COMPLETED` 并记录完成日期；
+- 明确知道 `COMPLETED` 只表示阅读完成，不是 mastery evidence；
 - 进入 closed-book 测试；
 - 第一次只提出一个主要问题；
 - 出新题前重新读取章节最新 Study Record，确认没有应恢复的 `OPEN` 题并分配下一个未使用 Q number；
@@ -145,7 +149,7 @@
 期望：
 
 - 先读取 `Review Analysis / RA05`；
-- 综合 `Current Strengths`、`Current Weaknesses`、原 assessment、Revision / Retest 和最近题目证据；
+- 综合 `Current Strengths`、`Current Weaknesses`、reading states、原 assessment、Revision / Retest 和最近题目证据；
 - 不只依赖当前聊天记忆；
 - 查询本身不创建新题目或新记录。
 
@@ -155,7 +159,7 @@
 
 期望：
 
-- 标记为 `UNVERIFIED` 或明确说明来源无法核对；
+- 判断为 `UNVERIFIED` 或明确说明来源无法核对；
 - 请求用户提供相关页或截图；
 - 不凭记忆编造定理条件、页码或公式。
 
@@ -165,10 +169,10 @@
 
 期望：
 
-- 对话可以继续，但明确告知记录尚未保存；
+- 对话可以继续，但明确告知 reading block / 题目 / 更新尚未保存；
 - 不声称已写入 `Review Analysis`；
-- 保留可复制的题目、答案和反馈内容，以便连接恢复后补写；
-- 连接恢复后先重新读取章节页再分配 Q number，避免重复编号。
+- 保留可复制的 reading block、题目、答案和反馈内容，以便连接恢复后补写；
+- 连接恢复后先重新读取章节页再补写或分配 Q number，避免重复记录。
 
 ## 13. Minimality Check
 
@@ -210,7 +214,8 @@ CI / scheduler / dashboard
 - 先读取 `Review Analysis / RA00` 历史；
 - 无历史时先做少量定义、量词、否定和证明策略诊断，而不是直接布置整段固定教材；
 - 只有诊断显示缺口时，才定向调用 Abbott §1.2 的相关部分；
-- 解释或阅读后用新的独立小题验证，不把“听懂”当作掌握证据。
+- 如果后续布置 reading block，写入 `Reading State: ASSIGNED`；
+- 解释或阅读后用新的独立小题验证，不把“听懂”或“读完”当作掌握证据。
 
 ## 16. Default Workflow Can Be Overridden
 
@@ -240,7 +245,7 @@ CI / scheduler / dashboard
 - 根据 `04_CURRICULUM.md` 识别 Rudin Chapter 3 覆盖 RA05（sequences）与 RA06（series）；
 - 读取 RA05 / RA06 的历史；
 - 从最早尚未完成或当前应该继续的 knowledge chapter 开始；
-- 给出该 unit 的有限 Rudin reading block。
+- 如果该 unit 已有 `ASSIGNED` reading block，恢复它；否则给出并持久化一个新的有限 Rudin reading block。
 
 ## 18. Ambiguous Bare Chapter Number
 
@@ -256,6 +261,7 @@ CI / scheduler / dashboard
 
 - 不自行猜测；
 - 只问一次简短澄清，例如“你指 RA03，还是 Rudin Chapter 3？”；
+- 澄清前不布置 reading block、不写 Notion；
 - 澄清后直接进入对应流程，不要求额外命令格式。
 
 如果当前 conversation 已明确一直使用 Rudin chapter number，则后续“第三章”可以沿用该语境，不重复无意义澄清。
@@ -285,34 +291,94 @@ CI / scheduler / dashboard
 - conversation B 出题前重新读取 RA06 最新 Study Record；
 - 看到 Q13 已存在后使用 Q14，而不是根据旧聊天记忆也创建 Q13；
 - 如果存在当前应继续的 OPEN Q13，则优先恢复它，而不是创建 Q14；
-- 不创建 Session / Conversation entity 来解决编号问题。
+- 不创建 Session / Conversation entity 来解决编号问题；
+- v1 的保证是 sequential resume，不把两个 conversation 完全同时写同一 RAxx 说成原子并发安全；若出现竞争，以最新 Notion 页面为准重新读取和分配。
 
 ## 21. Chapter Ready to Advance
 
-前提：某章节已经有以下证据：
+前提：某章节已经满足以下条件：
 
+- `04_CURRICULUM.md` 中该 knowledge chapter 的 core reading scope 已由 `COMPLETED` reading blocks 覆盖；
+- chapter-specific `出口证据` 已有直接证据覆盖；
 - 核心定义/定理条件准确；
 - 能处理一个必要条件或反例；
 - 独立完成一个短证明；
 - 在一道有区分度的教材题或综合题中成功迁移；
-- 早先的关键 `PARTIAL` 缺口已经经过 remediation，并在新的独立作答或 Retest 中验证修复。
+- 早先的关键 `PARTIAL` 缺口已经经过 remediation，并在新的独立作答或 Retest 中验证修复；
+- 没有关键能力只停留在 explanation-only 或 `UNVERIFIED`。
 
 期望：
 
-- `Current Assessment` 明确说明当前证据足以继续，而不是只写“做完了”；
+- `Current Assessment` 明确说明 core coverage 与当前证据足以继续，而不是只写“做完了”；
 - `Current Strengths` 对应到实际题目证据；
 - 旧错误仍保留在历史，不被抹掉；
+- 明确 optional / deferred 材料不阻塞推进的理由（如有）；
 - `Next` 可以指向下一 knowledge chapter；
 - 不需要机械凑固定题数或 mastery score。
 
 ## 22. Chapter Not Ready to Advance
 
-前提：用户已经读完本章 reading blocks，也答对了若干定义题，但仍有一个核心证明能力只得到 `PARTIAL`，之后只听过解释，没有独立验证。
+前提 A：用户只完成了某章节前半的 reading block，并在这一小段上已经满足 statement / boundary / proof / transfer，但该章节后续 core reading scope 和 chapter-specific 出口证据尚未覆盖。
+
+前提 B：用户已经读完全部 core reading blocks，也答对了若干定义题，但仍有一个核心证明能力只得到 `PARTIAL`，之后只听过解释，没有独立验证。
 
 期望：
 
-- 不因为“教材读完了”或“多数题答对”就宣布本章完成；
+- A 中不得因为“已测部分表现很好”就宣布整章 ready；`Next` 应继续到本章尚未覆盖的 core reading block；
+- B 中不得因为“教材读完了”或“多数题答对”就宣布本章完成；
 - `Current Assessment` 保持 `PARTIAL` 或 `UNVERIFIED` 等合适语言判断；
-- `Current Weaknesses` 保留该证明缺口；
-- `Next` 继续留在当前章，给出最小补救和独立验证方向；
+- `Current Weaknesses` 或 `Next` 明确区分缺失的是 content coverage、独立证据还是待修复能力；
 - 如果用户明确要求跳到下一章，可以跳转，但记录为用户路径选择，不写成该章已验证掌握。
+
+## 23. No Independent Attempt
+
+前提：Project 已提出正式 assessment，题目记录为 `OPEN`。
+
+输入之一：
+
+```text
+我不会。
+跳过这题。
+直接给我完整证明。
+```
+
+且用户此前没有 substantive independent attempt。
+
+期望：
+
+- 完成同一条 `OPEN` 记录并改为 `COMPLETE`；
+- `My Answer` 保存真实状态，例如 `No attempt` / `Skipped` / `Requested full solution before attempt`；
+- `Assessment` 使用 `UNVERIFIED`，而不是凭空写 `INCORRECT`；
+- Feedback 明确“尚无独立掌握证据”；
+- 通常不强行填写 `Issue`，除非用户已经提供足够内容支持诊断；
+- 该记录不能作为 readiness 的正向证据；
+- 如果用户要求完整解，尊重请求，但后续只有新的独立验证才能产生 mastery evidence。
+
+## 24. Full End-to-End Chapter Flow and Resume
+
+目标：验证整个 Tutor runtime，而不只是单个组件。
+
+过程：
+
+1. 在一个新或可清理的测试 knowledge chapter 中输入 `开始 RAxx`；
+2. Project 读取 Notion 历史，创建或恢复有限 reading block；
+3. 新 block 在 Notion 中为 `Reading State: ASSIGNED`；
+4. 用户输入“这一段读完了”；
+5. 同一 block 变为 `COMPLETED`；
+6. Project 创建 Q1（或下一个可用 Q）为 `OPEN`；
+7. 用户回答，Q record 原地变为 `COMPLETE`；
+8. 后续自适应 assessment 至少出现一次需要 remediation 的 `PARTIAL` 或等价缺口；
+9. 用户根据反馈修复，并通过 Revision / 新独立题 / Retest 完成 verification；
+10. 继续完成该 knowledge chapter 的全部 core reading scope 和 chapter-specific 出口证据；
+11. readiness contract 的 core coverage、statement、boundary、proof、transfer、gap closure、independent verification 全部满足；
+12. `Current Assessment / Strengths / Weaknesses / Next` 被正确更新；
+13. 新开一个 Project conversation，再次输入该章节或继续学习请求。
+
+最终期望：
+
+- 新 conversation 不依赖旧 chat memory，而是通过 `Review Analysis` 正确恢复；
+- 已 `COMPLETED` 的 reading blocks 不被重复布置；
+- 已 `COMPLETE` 的题目不被改写；
+- 没有未处理的 `OPEN` 题或 `ASSIGNED` block 时，Project 按 `Next` 进入正确的后续内容或下一 knowledge chapter；
+- 如果任一 core coverage 或 mastery evidence 条件仍缺失，则不能提前 advance；
+- 整个流程不需要后端、数据库、Session entity 或人工复制历史。
