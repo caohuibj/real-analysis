@@ -32,7 +32,9 @@
 
 ## 3. Study Record
 
-所有评估题和用户的有效回答按时间追加到 `## Study Record`。历史记录只追加，不覆盖、不删除。
+所有评估题和用户的有效回答按时间追加到 `## Study Record`。正式评估题在提出时先追加 `OPEN` 记录，回答后更新同一条记录；历史记录只追加，不覆盖、不删除。
+
+普通解释不自动变成评估题。跨章节相关性使用轻量引用，不复制另一页的完整答案。
 
 一次学习可以先有一个阅读块：
 
@@ -47,7 +49,7 @@ Reading Focus:
 - [重点二]
 ```
 
-随后逐题追加。题目格式见 `03_NOTION.md`。
+随后逐题追加。题目格式见 `03_NOTION.md`。如果教材习题在历史中已经出现，只有有意复测时才再次使用，并在题目记录中明确标记 `Retest`。
 
 ## 4. Evidence Rules
 
@@ -82,6 +84,7 @@ Reading Focus:
 3. 更新或合并 `Current Weaknesses`，避免把同一个根本问题重复写很多遍；
 4. 更新 `Next`；
 5. 保留旧判断在历史记录中，不把历史改写成“从来没有出错”。
+6. 如果本次证据与另一章节有关，在相关章节的 `Study Record` 追加 `Cross-Chapter Evidence — from RAxx / Qn (date): ...`；源记录仍是唯一完整证据，不复制整条记录。
 
 如果本次回答没有改变对章节的判断，只需追加题目记录，不要为了形式重复重写顶部。
 
@@ -108,15 +111,20 @@ Concept Note 不是评估题，不能替代用户独立回答产生的证据。
 
 用户再次进入章节时：
 
-1. 读取页面顶部当前判断；
-2. 读取最近的 Study Record；
-3. 找出尚未验证的弱点和已有的正向证据；
-4. 设计下一道能区分“真正稳定”和“刚刚听懂”的题；
-5. 不要求用户重新提交整页历史。
+1. 先读取页面顶部当前判断（包括 `Current Assessment`、`Current Strengths`、`Current Weaknesses` 和 `Next`）；
+2. 读取最近的 Study Record，并检查是否有 `OPEN` 题目、未完成的 reading block 或 `Retest` 记录；
+3. 找出尚未验证的弱点、已有的正向证据和跨章节引用；
+4. 再决定是继续当前 block、先补救、进行 `Retest`，还是选择新的 reading block；
+5. 设计下一道能区分“真正稳定”和“刚刚听懂”的题；
+6. 不要求用户重新提交整页历史。
+
+没有历史时，才依据 `04_CURRICULUM.md` 从该章节的首个自然 block 开始。
 
 如果用户问“我最近主要有什么问题”，读取各章节页面中的 `Current Weaknesses` 和最近记录；如果只问某一道题，定位到该题记录，不要用泛泛的章节判断代替。
 
 ## 8. Chapter Readiness
+
+READ → ASSESS → REMEDIATE → VERIFY → ADVANCE 是默认节奏，不是锁定机制。没有足够证据时 Project 应说明 `UNVERIFIED` 或当前缺口，但不通过状态机阻止用户跳转。
 
 不设置锁定或强制顺序。Project 可以建议进入下一章，但用户始终可以：
 
@@ -127,7 +135,18 @@ Concept Note 不是评估题，不能替代用户独立回答产生的证据。
 
 建议进入下一章只表示目前证据足够支持继续，不表示旧章节永远不会复习。
 
-## 9. No Extra Entities
+## 9. Cross-Chapter Evidence References
+
+跨章节证据只使用普通 Markdown 行，不创建新的数据结构：
+
+```markdown
+Cross-Chapter Evidence — from RA05 / Q12 (2026-08-17)
+[一句话说明该题对当前章节的稳定能力或薄弱点提供了什么证据]
+```
+
+目标章节可以在 `Current Strengths` 或 `Current Weaknesses` 中引用这条记录，但完整题目、答案、原始判断和修订只保留在来源章节。若原题被修订，引用仍指向同一条 `Q[number]` 记录。
+
+## 10. No Extra Entities
 
 章节页内部的题目、答案、反馈、修订和 Issue 都是 Markdown 记录，不创建：
 

@@ -13,21 +13,21 @@ GitHub 只保存 Project 的运行文件和课程路线；日常学习不需要�
 ## 核心闭环
 
 ```text
-指定 Rudin 阅读范围
+进入 / 恢复章节并读取历史
+        ↓
+选择一个有限的 Rudin 阅读块
         ↓
 你自行阅读
         ↓
 你说“读完了”
         ↓
-ChatGPT 一次只问一个主要问题
+提出评估题并立即保存题目
         ↓
-你回答
+你回答后更新同一条记录
         ↓
 诊断、反馈、必要时补充解释
         ↓
-把题目、答案和证据写入 Review Analysis
-        ↓
-继续验证、补救或进入下一阅读范围
+默认验证修复后的能力，再继续或推进
 ```
 
 题目数量不是固定课程配置。回答稳定时提高问题层次；出现缺口时先补救并再次验证。
@@ -51,10 +51,13 @@ ChatGPT 一次只问一个主要问题
 - project/03_NOTION.md：Notion 页面结构、写入和读取规则；
 - project/04_CURRICULUM.md：Rudin 主线与 Abbott 辅助的章节路线。
 
-Rudin 是用户实际阅读的主教材。默认先让用户阅读，再进行 closed-book、一次一题的自适应测试。
-Abbott、习题和解答是 Project 的辅助资源，不要默认增加第二套阅读任务。
+Rudin 是用户实际阅读的主教材。进入或恢复章节时，先读取 `Review Analysis / RAxx` 的顶部状态和最近 Study Record，再选择下一段阅读。
+默认先让用户阅读，再进行 closed-book、一次一题的自适应测试；这是默认节奏，不是不可覆盖的锁定流程。
 
-所有测试题、用户答案、掌握良好或存在缺口的证据都要保存到 Notion 的 Review Analysis 对应章节页面。
+Abbott、习题和解答是 Project 的辅助资源，不要默认增加第二套阅读任务。解答是可选的事后校验源：只有用户已经进行实质性尝试，或明确要求参考解 / 完整解时才查阅；普通提示不先查解答。
+
+正式评估题一旦提出，就先在对应章节页建立未回答记录；用户回答后更新同一条记录。所有测试题、用户答案、掌握良好或存在缺口的证据都要保存到 Notion 的 Review Analysis 对应章节页面。
+布置教材习题前先检查历史，避免无意重复；有意复测时明确标记 `Retest`。跨章节相关证据只保存轻量引用，不复制整条记录。
 普通澄清性对话只在形成高价值结论时压缩记录，不要保存完整聊天 transcript。
 
 不要创建后端、代码、额外数据库、题目实体、Attempt、Session、分数模型或命令语法。
@@ -93,7 +96,7 @@ Review Analysis
 
 在其下创建 `RA00`–`RA11` 章节子页面。页面模板、字段和写入规则见 [`project/03_NOTION.md`](project/03_NOTION.md)。
 
-如果只有只读 Notion 同步，Project 可以回答问题，但不能可靠完成本项目要求的长期留存；不要把未成功写入的内容说成“已保存”。
+如果只有只读 Notion 同步，Project 可以回答问题，但不能可靠完成本项目要求的长期留存；不要把未成功写入的内容说成“已保存”。正式评估题的初始记录或后续更新任何一次失败，都必须明确告知用户尚未可靠保存。
 
 ### 5. 用验收场景检查装配
 
@@ -141,9 +144,10 @@ Project 应先读取 `Review Analysis` 中的章节页面，再总结当前稳�
 - `Source`：Rudin、Abbott、习题、用户题目或自拟题，以及已知的章节/题号；
 - `My Answer`：用户原始回答；
 - `Assessment`：`CORRECT`、`PARTIAL`、`INCORRECT` 或 `UNVERIFIED`；
-- `Evidence / Feedback`：判断依据、做得好的地方和最早的实质性缺口；
+- `Assessment`：原始回答的 `CORRECT`、`PARTIAL`、`INCORRECT` 或 `UNVERIFIED` 判断；
+- `Feedback`：判断依据、做得好的地方和最早的实质性缺口；
 - `Issue`：需要时使用 `CONCEPT`、`STRATEGY`、`LOGIC`、`RIGOR`、`EXECUTION`；
-- `Revision`：用户后续修正，追加在原记录中。
+- `Revision`、`Revision Assessment`、`Revision Feedback`：用户后续修正及其重新判断，追加在原记录中，不能覆盖原始判断。
 
 掌握好的回答同样保存，因为它们是进入下一章节或判断稳定性的正向证据。
 

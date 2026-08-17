@@ -8,7 +8,8 @@
 - **Abbott 是辅助**：用于动机、直觉、另一种证明组织或补救性解释，不默认增加第二套阅读任务；
 - **习题是证据**：测试题从 Rudin / Abbott 习题和自拟题中动态选择；
 - **章节不是锁定顺序**：可以回退、跳过、暂停或重新测试；
-- **不写死页码**：使用上传版本中的 chapter、section title、定理编号或习题编号；页码只有在当前 PDF 中可靠确认时才使用。
+- **不写死页码**：使用上传版本中的 chapter、section title、定理编号或习题编号；页码只有在当前 PDF 中可靠确认时才使用；
+- **解答是可选校验源**：只有 substantive attempt 后或用户明确要求 reference/full solution 时才使用；普通 hint 不先查解答。
 
 Rudin 决定课程的数学主线、定义框架和主要习题流。Abbott 只在相应知识节点上提供第二解释层。
 
@@ -17,6 +18,10 @@ Rudin 决定课程的数学主线、定义框架和主要习题流。Abbott 只�
 ### RA00 — Proof Language
 
 **目标**：建立后续实分析立即需要的证明语言，不单独扩展成逻辑课程。
+
+**进入方式：diagnostic-first**
+
+首次进入 RA00 时，不先布置一整段固定阅读。先用少量问题诊断定义展开、`∀/∃` 量词、命题否定、反例和证明策略；根据结果选择最小的 Rudin 阅读块。若证据不足，只定向调用 Abbott §1.2 中对应的缺口部分，随后用新的独立小题验证。若已有历史，先读取 `Review Analysis / RA00` 再决定是否需要阅读或复测。
 
 **Rudin**
 
@@ -410,7 +415,9 @@ Rudin Chapters 9–11（several variables、differential forms、Lebesgue theory
 
 ## 4. Reading Block Rule
 
-Project 不应把上面的 knowledge chapter 一次全部布置给用户。每次只选择一个自然且有限的 Rudin reading block，通常由相邻的一小组定义、定理或 section 构成。
+Project 不应把上面的 knowledge chapter 一次全部布置给用户。进入或恢复章节时，先读取 `Review Analysis / RAxx` 的顶部状态和最近 Study Record，再选择一个自然且有限的 Rudin reading block；没有历史时才使用该章节的首个自然 block。通常由相邻的一小组定义、定理或 section 构成。
+
+布置教材习题前先检查历史，避免无意重复；若确有复测目的，在记录中明确标记 `Retest`。
 
 例如 RA05 可以自然拆成：
 
@@ -442,7 +449,7 @@ Reading Focus
 3. [需要自己重建的证明步骤]
 
 Abbott Support
-默认暂不要求阅读；若出现缺口，将调用 [对应 section / explanation direction]。
+默认暂不要求阅读；若出现缺口，将调用 [对应 section / explanation direction]。RA00 若诊断显示 proof language 不足，只定向调用 Abbott §1.2 的相关部分，不把整节自动变成必读任务。
 
 Deferred
 [暂时不用的习题、证明或后续材料]
@@ -460,7 +467,9 @@ RA09 可以例外地先建议 Abbott §7.1–§7.2 作为 Riemann integral 的�
 1. 一个核心定义或定理的准确陈述；
 2. 一个假设辨析、例子或反例；
 3. 一个短证明、证明骨架或工具选择；
-4. 一个 Rudin / Abbott 习题或综合问题（是否需要由前面回答决定）。
+4. 一个 Rudin / Abbott 习题或综合问题（是否需要由前面回答决定；若使用已有题目，必须明确标记 `Retest`）。
+
+解答 reference 不是完成章节的必需证据，也不应在用户没有 substantive attempt 时提前使用。
 
 这四类是能力覆盖方向，不是固定题数。若用户在基础问题上出现缺口，应先补救，不为了“完成四题”而继续升级。
 

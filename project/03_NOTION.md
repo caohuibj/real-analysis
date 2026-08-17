@@ -79,38 +79,64 @@ Source
 [Rudin / Abbott / exercise / user-provided / self-authored]
 [章节、小节或题号；无法确认时写“待核对”]
 
+Record State
+OPEN / COMPLETE
+
 My Answer
-[用户原始回答；没有回答时写“未回答”或真实的放弃状态]
+[题目刚提出时写“等待回答”；之后写用户原始回答或真实的跳过、放弃、未回答状态]
 
 Assessment
-CORRECT / PARTIAL / INCORRECT / UNVERIFIED
+[原始判断：CORRECT / PARTIAL / INCORRECT / UNVERIFIED；题目刚提出时暂留空]
 
-Evidence / Feedback
-[为什么这样判断；做得好的地方；第一处关键缺口；最小修复]
+Feedback
+[原始判断的证据、做得好的地方、第一处关键缺口、为什么重要和最小修复]
 
 Issue
 CONCEPT / STRATEGY / LOGIC / RIGOR / EXECUTION
 
+Retest
+No；如果是有意重复教材题，写 `Retest — [目的]`
+
+Solution Reference
+Not consulted；或写“substantive attempt 后核对 / 用户明确要求 reference/full solution 后核对 / unavailable”
+
 Revision
 [后续修订；没有时删除该段或写“无”]
+
+Revision Assessment
+[对修订后的同一题重新判断]
+
+Revision Feedback
+[修订是否修复原缺口，以及新的最小修复]
 ```
 
 字段是记录语义，不是要求用户填写表单。Project 应在对话中自然完成并写入。
 
 ### 写入细则
 
-- 默认在用户已经回答、明确放弃或结束该题后，一次性写入完整 assessment record；
-- 不要求在“题目刚提出”时先做一次独立 Notion write；
-- 用户正常回答时保存完整 `Question`、`Source`、`My Answer`、`Assessment` 和反馈；
-- 用户明确说“不会”“跳过”或直接请求答案时，也要保留该题，并如实记录 `My Answer` 的状态；
-- 用户只是暂时中断、尚未回答时，可以先由当前 conversation 保持上下文；若明确结束测试/切换章节，再按需要补成未回答记录；
-- `CORRECT` 记录正向 `Evidence`，不要只保存错误；
+- 正式评估题一旦提出，立即写入同一条 `OPEN` 记录：`Question`、`Source`、`Record State: OPEN`、`My Answer: 等待回答`；
+- 用户回答、明确说“不会”、跳过、请求完整解或放弃后，更新这条记录的 `My Answer`、`Assessment`、`Feedback` 和必要的 `Issue`；
+- 题目提出时不要伪造最终判断；`Assessment` 可以暂留空，直到形成可靠诊断；
+- `CORRECT` 记录正向证据，不要只保存错误；
 - `PARTIAL` 或 `INCORRECT` 才在确有诊断价值时写 `Issue`；
 - `UNVERIFIED` 用于来源或提取可靠性不足，不等同于用户不会；
-- 用户修改同一道题时追加 `Revision`，更新同一条记录，不新建 Attempt 页面；
-- 不要删除原始回答，不要用最终证明覆盖第一次作答。
+- 如果教材题在历史中已经出现，只有有意复测时才再次使用，并写 `Retest` 及目的；
+- 解答是可选校验源：substantive attempt 后或用户明确要求 reference/full solution 后才查阅；普通 hint 不先查解答；解答不可用时不阻塞流程；
+- 用户修改同一道题时追加 `Revision`、`Revision Assessment`、`Revision Feedback`，更新同一条记录，不新建 Attempt 页面；
+- 不要删除原始回答、原始判断或原始反馈，不要用最终证明覆盖第一次作答。
 
-## 5. Concept Note
+## 5. Cross-Chapter Evidence
+
+当一个章节中的评估证据对另一个章节也有诊断价值时，在受影响章节的 `Study Record` 中追加一行：
+
+```markdown
+Cross-Chapter Evidence — from RAxx / Q[number] (YYYY-MM-DD)
+[一句话说明该证据支持或暴露的能力]
+```
+
+只保存指向来源题目的轻量引用；完整题目、答案、原始判断、反馈和修订仍只保留在来源章节。不要创建跨章节数据库、复制整条题目记录或把引用当成新的 assessment。
+
+## 6. Concept Note
 
 当普通解释产生了高价值、可复用的结论时，追加：
 
@@ -129,13 +155,13 @@ Resolution
 
 不要把整个聊天逐字复制到 Notion。Concept Note 也不能冒充一次独立作答的掌握证据。
 
-## 6. Persistence Rules
+## 7. Persistence Rules
 
 ### 必须写入
 
-- Project 实际布置并进入 assessment 的问题；
+- Project 实际布置并进入 assessment 的问题（题目提出时先写 `OPEN` 记录）；
 - 用户对每道题的原始回答或真实的未答/放弃状态；
-- `CORRECT`、`PARTIAL`、`INCORRECT`、`UNVERIFIED` 的判断（能够形成判断时）；
+- `CORRECT`、`PARTIAL`、`INCORRECT`、`UNVERIFIED` 的原始判断（能够形成判断时）；
 - 反馈、Issue、修订和正向证据；
 - 影响当前判断的阅读范围和下一步建议。
 
@@ -155,9 +181,12 @@ Notion 连接不可用、权限不足或写入返回失败时：
 3. 保留可复制的记录内容；
 4. 连接恢复后补写原始题目、答案、判断和反馈。
 
-## 7. Retrieval Rules
+## 8. Retrieval Rules
 
 ```text
+进入或恢复章节
+→ 先读取对应章节页顶部、最近 Study Record、OPEN 题目、Retest 记录和跨章节引用，再选择 reading block 或下一题
+
 当前章节掌握情况
 → 读取对应章节页顶部和最近 Study Record
 
@@ -173,6 +202,6 @@ Notion 连接不可用、权限不足或写入返回失败时：
 
 纯查询不创建新题目或新记录。
 
-## 8. Connection Requirement
+## 9. Connection Requirement
 
 本结构依赖一个允许 Project 执行 Notion 写入的连接。只读同步可以用于查询（若当前连接支持），但不能满足“所有题目和学习记录都保存”的要求。
